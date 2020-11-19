@@ -1,0 +1,84 @@
+<div id="box" class="a" style="box-shadow: rgba(0, 0, 0, 0.49) 4px 5px 15px 6px;">
+<h2 style="text-align: center;"><strong>Bot Defender</strong></h2>
+<p style="text-align: center;">&nbsp;</p>
+<h3 style="text-align: center; padding-left: 300px; padding-right: 300px;"><strong><em id="substatus">Checking subscription...</em></strong></h3>
+<div id="column2" style="text-align: center;">
+	<p style="text-align: center; padding-left: 300px; padding-right: 300px;">To be subscribed, you need to buy a VIP server for 350 Robux per month.</p>
+	<p style="text-align: center;"><span style="color: #00ccff;"><a style="color: #00ccff;" href="https://www.roblox.com/games/5377479581/Bot-Defender">https://www.roblox.com/games/5377479581/Bot-Defender</a></span></p>
+	<h3 style="text-align: center;">&nbsp;</h3>
+	<h3 style="text-align: center;"><strong><em>Join our Discord server!</em></strong></h3>
+	<p style="text-align: center; padding-left: 300px; padding-right: 300px;">In the Discord server you can report trade botters who aren't on the list, ask for yourself to be removed off the list (if you were errantly added), report bugs to the developers, make suggestions for updates, or simply chat.</p>
+	<p style="text-align: center;"><span style="color: #00ccff;"><a style="color: #00ccff;" href="https://discord.gg/qJpQdkW">https://discord.gg/qJpQdkW</a></span></p>
+	<br><br>
+	<h3 style="text-align: center;"><span style="font-size: 16.38px;"><em>Frequently Asked Questions (FAQ)</em></span></h3>
+	<h3 style="text-align: center;"><span style="font-size: 14px;">The extension doesn't work, what am I supposed to do?</span></h3>
+	<p style="text-align: center; margin-left: 300px; margin-right: 300px;">There are a variety of things that could be causing the extension not to run. First make sure you have a <a style="color: #00ccff;" href="https://www.roblox.com/games/5377479581/Bot-Defender">subscription</a>, then restart the extension from chrome://extensions. It may take a few minutes to register your subscription. <br><br>If that doesn't solve the problem, click on the extension's icon to bring up the page with an on-off switch (that you had to click to open this info page). If the switch is bright red and says "OFF", click it to turn on Bot Defender. If it's still not working, join our Discord server and tell us what's wrong.</p>
+	<h3 style="text-align: center;"><span style="font-size: 14px;">Can't I just set my trades to followers only?</span></h3>
+	<p style="text-align: center; margin-left: 300px; margin-right: 300px;">Yes, this will block most bots. But it also reduces the amount of legitimate trades you receive, thanks to the added effort it takes to send you a trade. Many users will stop bothering if they see that your trades are closed, my experiments showed that I receive around 20% less trades than when they're completely open (excluding bots of course). You'll also be affected by this as you'll have to follow users every single time you send a trade.</p>
+	<h3 style="text-align: center;"><span style="font-size: 14px;">I'm on the list but I'm not a bot?</span></h3>
+	<p style="text-align: center;">Appeals can be made in our Discord server.</p>
+	<h3 style="text-align: center;"><span style="font-size: 14px;">What information can this extension access?</span></h3>
+	<p style="text-align: center; margin-left: 300px; margin-right: 300px;">As can be seen in our code, which is accessible to all, the extension itself does not send us information of any kind. It simply declines trades from certain users who are flagged as bots. The only data we have regarding the extension is the amount of people who downloaded this extension, provided by Google, and the revenue we get from the VIP server subscription.</p>
+	<h3 style="text-align: center;"><span style="font-size: 14px;">I'm being spammed by a bot but the extension isn't declining their trades, why?</span></h3>
+	<p style="text-align: center; margin-left: 300px; margin-right: 300px;">We have a manually compiled list of known bots due to it being near-impossible to detect them automatically. This means we will be missing some new botters, so if you want someone added to the list please join the Discord server and show us screenshots of their trades.</p>
+	<h3 style="text-align: center;"><span style="font-size: 14px;">Why does this cost 350 Robux per month?</span></h3>
+	<p style="text-align: center; margin-left: 300px; margin-right: 300px;">I'm a small scale developer and I need money to pay the bills. The Robux can be Devexed - it all helps, my financial situation isn't very stable, and 350 robux isn't a steep price to pay in comparison to the sheer pain of declining 200 botted trades every morning - it's the same price as an egg.</p>
+	<div id="column2" class="column" style="text-align: center;">&nbsp;</div>
+	<div class="column" style="text-align: center;"><strong><em>List of botters who currently get all their trades declined.</em></strong></div>
+	<div class="column" style="text-align: center;">&nbsp;</div>
+	<div style="text-align: center;"><button id="showbots" type="button"><em>Show the full list of bots</em></button></div>
+	<div class="row">
+		<div class="row">
+			<div class="column" style="text-align:left">
+				
+			</div>
+			<div class="column" id="botcol1" style="text-align:right">
+				
+			</div>
+		</div>
+		<div class="row">
+			<div class="column" id="botcol2" style="text-align:left">
+				
+			</div>
+			<div class="column" style="text-align:right">
+				
+			</div>
+		</div>
+	</div>
+	<br><br>
+	<br><br>
+</div>
+
+<head>
+	<title>Bot Defender Info</title>
+	<script src="options.js"></script>
+</head>
+
+<style>
+	div.a {
+		width: 95%;
+		overflow:hidden;
+		height: auto;
+		margin: auto;
+		position: absolute;
+		top: 0; left: 0; right: 0;
+		background-color:#0F0F0F;
+		color:#D9D9D9;
+	}
+	
+	.row {
+		display: flex;
+		width:100%;
+	}
+	
+	.column {
+		flex: 50%;
+		margin-left: 20px;
+		margin-right: 20px;
+	}
+</style>
+
+<body 
+	style="background-color:#272727;">
+	
+</body>

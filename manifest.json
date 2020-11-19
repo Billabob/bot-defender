@@ -1,0 +1,35 @@
+{
+    "manifest_version": 2,
+
+    "name": "Roblox Trade Bot Defender",
+    "description": "Automatically declines trades from bots",
+    "version": "0.0.0.3",
+
+    "background": {
+		"scripts": ["background.js", "popup.js"],
+        "persistent": true
+    },
+	
+	"icons": { 
+		"16": "logo.png",
+        "48": "logo.png",
+        "128": "logo.png"
+	},
+
+    "permissions": [
+        "https://www.roblox.com/private-server/*",
+        "https://trades.roblox.com/v1/trades/*",
+        "https://users.roblox.com/v1/users/1/status",
+        "https://pastebin.com/raw/*",
+        "storage"
+    ],
+		
+    "browser_action": {
+        "default_icon": "logo.png",
+        "default_popup": "popup.html"
+    },
+	
+	"web_accessible_resources": [
+		"*.png"
+	]
+}
