@@ -75,13 +75,6 @@ function DeclineBots() {
 				var response = JSON.parse(DeclineXHR.response)
 				if(DeclineXHR.status == 200){
 					TradesDeclinedSession++ // Adds one to # of trades declined this session
-					chrome.storage.local.get('TradesDeclinedTotal',function(result){
-						if(isNaN(result.TradesDeclinedTotal)){
-							chrome.storage.local.set({"TradesDeclinedTotal": 0}) // Sets # trades declined to 0 in case there's no saved stat
-						}else{
-							chrome.storage.local.set({"TradesDeclinedTotal": result.TradesDeclinedTotal+1}) // Sets # trades declined to one more
-						}
-					})
 				}
 				if(DeclineXHR.status == 400){
 					if(isNaN(Strikes[ID])){
@@ -105,6 +98,7 @@ function DeclineBots() {
 	// Get all inbound trades
 	function CompileInbounds(Token) {
 		var Inbounds = []
+        var localDeclined = 0
 		function Page(NPC) {
 			if(NPC == undefined) {NPC = ""}
 			var inboundURL = "https://trades.roblox.com/v1/trades/inbound?cursor=" + NPC + "&limit=100&sortOrder=Desc"
@@ -120,6 +114,7 @@ function DeclineBots() {
 						for(i = 0; i < Inbounds.length; i++) {
 							if(BotList[Inbounds[i].user.id]&&!GlitchedTrades[Inbounds[i].id]){ // If the sender is on the bot list... then decline
 								DeclineTrade(Inbounds[i].id, Token)
+                                localDeclined+=1
 							}
 						}
 					}
@@ -128,6 +123,14 @@ function DeclineBots() {
 			inboundXHR.send();
 		}
 		Page()
+        
+        chrome.storage.local.get('TradesDeclinedTotal',function(result){
+            if(isNaN(result.TradesDeclinedTotal)){
+                chrome.storage.local.set({"TradesDeclinedTotal": 0}) // Sets # trades declined to 0 in case there's no saved stat
+            }else{
+                chrome.storage.local.set({"TradesDeclinedTotal": result.TradesDeclinedTotal+localDeclined}) // Sets # trades declined to one more
+            }
+        })
 	}
 	
 	// Tries to set the status of ID=1 (Roblox) to nothing. This will fail obviously but I will get the validation token.
