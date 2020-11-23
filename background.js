@@ -4,6 +4,7 @@ var TradesDeclinedSession = 0
 var GlitchedTrades = {}
 var Strikes = {}
 var SubscriptionStatus = "unknown"
+var PBResult
 
 // Made by suikermeloen and billabot
 // Join the discord server for bug reports and/or questions: discord.gg/Cn39Ys
@@ -61,7 +62,6 @@ chrome.runtime.onMessage.addListener(
 	return true
 	}
 );
-var PBResult
 
 function DeclineBots() {
 
