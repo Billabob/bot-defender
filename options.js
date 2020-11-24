@@ -18,12 +18,13 @@ function run(){
 				if(n<15){
 					setTimeout(function(){addbots(n+1)},100)
 				}else{
-					var rest = document.getElementById("botcol1").innerHTML+bots[n][0]+"<br>"
-					var restN = document.getElementById("botcol2").innerHTML+bots[n][1]+"<br>"
-					function add(n+15){
-						if(n<bots.length){
-							rest = rest+bots[n][0]+"<br>"
-							restN = restN+bots[n][0]+"<br>"
+					var rest = ""
+					var restN = ""
+					function add(n){
+						var x = n+15
+						if(n<bots.length-15){
+							rest = rest+bots[x][0]+"<br>"
+							restN = restN+bots[x][1]+"<br>"
 							add(n+1)
 						}else{
 							document.getElementById("botcol1").innerHTML=document.getElementById("botcol1").innerHTML+rest
