@@ -1,17 +1,20 @@
 var print = console.log
 var TradesDeclinedTotal = 0
 var TradesDeclinedSession = 0
+var DecRunningTotal = 0
 var GlitchedTrades = {}
 var Strikes = {}
 var SubscriptionStatus = "unknown"
+var PBResult
 
-// Made by suikermeloen and billabot
+// Made by billabot
 // Join the discord server for bug reports and/or questions: discord.gg/Cn39Ys
 
 chrome.storage.local.get('FirstTime',function(firsttime){
 	if(firsttime['FirstTime']==undefined){
 		alert("Welcome to Bot Defender! Please click the extension icon then click the blue 'i' for more information on how to get this extension running.")
 		chrome.storage.local.set({FirstTime:false});
+		chrome.storage.local.set({TradesDeclinedTotal:0});
 	}
 })
 
@@ -61,7 +64,6 @@ chrome.runtime.onMessage.addListener(
 	return true
 	}
 );
-var PBResult
 
 function DeclineBots() {
 
@@ -77,9 +79,9 @@ function DeclineBots() {
 					TradesDeclinedSession++ // Adds one to # of trades declined this session
 					chrome.storage.local.get('TradesDeclinedTotal',function(result){
 						if(isNaN(result.TradesDeclinedTotal)){
-							chrome.storage.local.set({"TradesDeclinedTotal": 0}) // Sets # trades declined to 0 in case there's no saved stat
+							chrome.storage.local.set({"TradesDeclinedTotal": Math.max(1,TradesDeclinedSession)}) // Sets # trades declined to 1 in case there's no saved stat
 						}else{
-							chrome.storage.local.set({"TradesDeclinedTotal": result.TradesDeclinedTotal+1}) // Sets # trades declined to one more
+							DecRunningTotal = DecRunningTotal+1
 						}
 					})
 				}
@@ -117,11 +119,19 @@ function DeclineBots() {
 					if(result.nextPageCursor != null) {
 						Page(result.nextPageCursor)
 					} else {
+						DecRunningTotal = 0
 						for(i = 0; i < Inbounds.length; i++) {
 							if(BotList[Inbounds[i].user.id]&&!GlitchedTrades[Inbounds[i].id]){ // If the sender is on the bot list... then decline
 								DeclineTrade(Inbounds[i].id, Token)
 							}
 						}
+						chrome.storage.local.get('TradesDeclinedTotal',function(result){
+							if(isNaN(result.TradesDeclinedTotal)){
+								chrome.storage.local.set({"TradesDeclinedTotal": Math.max(DecRunningTotal,TradesDeclinedSession)}) // Sets # trades declined to 1 in case there's no saved stat
+							}else{
+								chrome.storage.local.set({"TradesDeclinedTotal": result.TradesDeclinedTotal+DecRunningTotal})
+							}
+						})
 					}
 				}
 			}
@@ -152,10 +162,6 @@ function DeclineBots() {
 		VIPXHR.open("GET", VIPLink, true);
 		VIPXHR.onreadystatechange = function() {
 			if(VIPXHR.readyState == 4) {
-				if(VIPXHR.status==400){
-					warn("probably not logged in lol")
-					return
-				}
 				var servers = (JSON.parse(VIPXHR.responseText)).Instances
 				SubscriptionStatus = false
 				for(i=0;i<servers.length;i++){
