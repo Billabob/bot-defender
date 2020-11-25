@@ -81,7 +81,7 @@ function DeclineBots() {
 						if(isNaN(result.TradesDeclinedTotal)){
 							chrome.storage.local.set({"TradesDeclinedTotal": Math.max(1,TradesDeclinedSession)}) // Sets # trades declined to 1 in case there's no saved stat
 						}else{
-							DecRunningTotal = DecRunningTotal+1
+							DecRunningTotal++
 						}
 					})
 				}
@@ -125,13 +125,13 @@ function DeclineBots() {
 								DeclineTrade(Inbounds[i].id, Token)
 							}
 						}
-						chrome.storage.local.get('TradesDeclinedTotal',function(result){
+						setTimeout(function(){chrome.storage.local.get('TradesDeclinedTotal',function(result){
 							if(isNaN(result.TradesDeclinedTotal)){
 								chrome.storage.local.set({"TradesDeclinedTotal": Math.max(DecRunningTotal,TradesDeclinedSession)}) // Sets # trades declined to 1 in case there's no saved stat
 							}else{
 								chrome.storage.local.set({"TradesDeclinedTotal": result.TradesDeclinedTotal+DecRunningTotal})
 							}
-						})
+						})},1000)
 					}
 				}
 			}
