@@ -8,7 +8,7 @@ var SubscriptionStatus = "unknown"
 var PBResult
 
 // Made by billabot
-// Join the discord server for bug reports and/or questions: discord.gg/Cn39Ys
+// Join the discord server for bug reports and/or questions: discord.gg/qJpQdkW
 
 chrome.storage.local.get('FirstTime',function(firsttime){
 	if(firsttime['FirstTime']==undefined){
