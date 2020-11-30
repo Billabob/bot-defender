@@ -49,7 +49,7 @@ chrome.runtime.onMessage.addListener(
 						var servers = (JSON.parse(VIPXHR.responseText)).Instances
 						SubscriptionStatus = false
 						for(i=0;i<servers.length;i++){
-							if(servers[i].DoesBelongToUser && servers[i].IsPrivateServerSubscriptionActive){
+							if(servers[i].DoesBelongToUser && servers[i].StatusType!=3){
 								SubscriptionStatus = true
 							}
 						}
@@ -165,7 +165,7 @@ function DeclineBots() {
 				var servers = (JSON.parse(VIPXHR.responseText)).Instances
 				SubscriptionStatus = false
 				for(i=0;i<servers.length;i++){
-					if(servers[i].DoesBelongToUser && servers[i].IsPrivateServerSubscriptionActive){
+					if(servers[i].DoesBelongToUser && servers[i].StatusType!=3){
 						SubscriptionStatus = true
 						GetToken()
 						return
