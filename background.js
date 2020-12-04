@@ -12,7 +12,7 @@ var PBResult
 
 chrome.storage.local.get('FirstTime',function(firsttime){
 	if(firsttime['FirstTime']==undefined){
-		alert("Welcome to Bot Defender! Please click the extension icon then click the blue 'i' for more information on how to get this extension running.")
+		alert("Welcome to Bot Defender! Please click the extension icon then click the blue 'i' for information on how to get this extension running.")
 		chrome.storage.local.set({FirstTime:false});
 		chrome.storage.local.set({TradesDeclinedTotal:0});
 	}
