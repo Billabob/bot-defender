@@ -177,7 +177,7 @@ function DeclineBots() {
 	}
 	
 	// Gets a bot list (from pastebin which allows us to update it)
-	function GetBotList() {
+	/*function GetBotList() {
 		var pasteLink = 'https://pastebin.com/raw/TCTEfEMB'
 		var pasteXHR = new XMLHttpRequest()
 		pasteXHR.open("GET", pasteLink, true);
@@ -194,6 +194,25 @@ function DeclineBots() {
 		}
 		pasteXHR.setRequestHeader('cache-control', 'public, max-age=300') // it only caches for 5 minutes i.e it becomes outdated for a maximum period of 5 minutes
 		pasteXHR.send()
+	}*/
+	//Gets the list of trade botters from Google sheets, which allows multiple developers to update the 
+	//list - an improvement over the Pastebin we used before, which can only be edited by one person.
+	function GetBotList() { 
+		var SheetsURL = "https://spreadsheets.google.com/feeds/cells/1K7XHcg7C3cp7iheuuquK2Koy9sSL4EgiPNoBAgT5Y4M/1/public/full?alt=json";
+		var SheetsXHR = new XMLHttpRequest();
+		SheetsXHR.onreadystatechange = function (){if (SheetsXHR.readyState == 4) {
+			var bots = JSON.parse(SheetsXHR.responseText).feed.entry
+			BotList = {};
+			PBResult = [];
+			for (i = 2; i < bots.length; i++){if(bots[i].gs$cell.col == 1 && !isNaN(bots[i].gs$cell.inputValue)){
+				PBResult[PBResult.length] = [Number(bots[i].gs$cell.inputValue)]
+				BotList[Number(bots[i].gs$cell.inputValue)] = true
+			}else if(bots[i].gs$cell.col == 2){
+				PBResult[PBResult.length-1][1] = bots[i].gs$cell.inputValue //populate usernames too
+			}}
+			CheckSubscription()
+		}}
+		SheetsXHR.open("GET", SheetsURL, true); SheetsXHR.send(null);
 	}
 	
 	chrome.storage.local.get('isiton',function(isiton){
