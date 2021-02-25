@@ -165,7 +165,7 @@ function DeclineBots() {
 				var servers = (JSON.parse(VIPXHR.responseText)).Instances
 				SubscriptionStatus = false
 				for(i=0;i<servers.length;i++){
-					if(servers[i].PrivateServer.DoesBelongToUser && servers[i].PrivateServer.StatusType!=3){
+					if(servers[i].DoesBelongToUser && servers[i].PrivateServer.StatusType!=3){ //thanks roblox for inexplicably putting half the values in a PrivateServer wrapper
 						SubscriptionStatus = true
 						GetToken()
 						return
