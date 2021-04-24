@@ -184,25 +184,7 @@ function DeclineBots() {
 			PBResult[PBResult.length][1] = BotList[k] // ???????????????
 		}
 		
-		/*
-		CheckSubscription()
-		
-		var SheetsURL = "https://spreadsheets.google.com/feeds/cells/1K7XHcg7C3cp7iheuuquK2Koy9sSL4EgiPNoBAgT5Y4M/1/public/full?alt=json";
-		var SheetsXHR = new XMLHttpRequest();
-		SheetsXHR.onreadystatechange = function (){if (SheetsXHR.readyState == 4) {
-			var bots = JSON.parse(SheetsXHR.responseText).feed.entry
-			BotList = {};
-			PBResult = [];
-			for (i = 2; i < bots.length; i++){if(bots[i].gs$cell.col == 1 && !isNaN(bots[i].gs$cell.inputValue)){
-				PBResult[PBResult.length] = [Number(bots[i].gs$cell.inputValue)]
-				BotList[Number(bots[i].gs$cell.inputValue)] = true
-			}else if(bots[i].gs$cell.col == 2){
-				PBResult[PBResult.length-1][1] = bots[i].gs$cell.inputValue //populate usernames too
-			}}
-			()
-		}}
-		SheetsXHR.open("GET", SheetsURL, true); SheetsXHR.send(null);
-		*/
+		CheckSubscription() // not going to go further than this
 	}
 	
 	chrome.storage.local.get('isiton',function(isiton){
@@ -224,9 +206,4 @@ function DeclineBots() {
 	})
 }
 
-function Loop(f, minutes) {
-    setInterval(f, minutes * 1000 * 60);
-}
-
-Loop(DeclineBots, 1)
-DeclineBots()
+setInterval(DeclineBots, 1 * 1000 * 60); DeclineBots()
