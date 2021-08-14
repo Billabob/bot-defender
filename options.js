@@ -37,17 +37,6 @@ function run(){
 			addbots(1); //yes i know arrays start at 0, i just don't want cotten eye joe displaying
 			
 		}
-		chrome.runtime.sendMessage({
-			a:"substatus"
-		}, function(substatus) {
-			if(substatus){
-				document.getElementById("substatus").innerHTML="Subscription status: active"
-				document.getElementById("substatus").style="color:green"
-			}else{
-				document.getElementById("substatus").innerHTML="Subscription status: inactive"
-				document.getElementById("substatus").style="color:red"
-			}
-		})
 	});
 }
 
