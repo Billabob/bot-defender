@@ -154,11 +154,14 @@ function DeclineBots() {
 	}
 	
 	async function GetBotList() {
-		BotList = await fetch('https://gist.githubusercontent.com/codetariat/03043d47689a6ee645366d327b11944c/raw/')
+		let preBotList = await fetch('https://gist.githubusercontent.com/codetariat/03043d47689a6ee645366d327b11944c/raw/')
 		.then(res=>res.json())
-		for(let k in BotList){
-			PBResult[PBResult.length] = k
-			PBResult[PBResult.length][1] = BotList[k] // ???????????????
+		
+		PBResult = preBotList
+		
+		BotList = {}
+		for(let k in preBotList){
+			BotList[preBotList[k][0]] = preBotList[k][1]
 		}
 		
 		let token = await GetToken() // not going to go further than this
