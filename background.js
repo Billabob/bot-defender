@@ -142,38 +142,15 @@ function DeclineBots() {
 	
 	// Tries to set the status of ID=1 (Roblox) to nothing. This will fail obviously but I will get the validation token.
 	// The token is needed to actually execute an action such as declining a trade
-	function GetToken() {
-		var statusURL = 'https://users.roblox.com/v1/users/1/status'
-		var statusXHR = new XMLHttpRequest();
-		statusXHR.open("PATCH", statusURL, true);
-		statusXHR.onreadystatechange = function() {
-			if (statusXHR.readyState == 4) {
-				CompileInbounds(statusXHR.getResponseHeader('X-CSRF-TOKEN'))
-			}
-		}
-		statusXHR.setRequestHeader("Content-Type", "application/json")
-		statusXHR.send()
-	}
-	
-	 // Check if you have a VIP server
-	function CheckSubscription() {
-		var VIPLink = 'https://www.roblox.com/private-server/instance-list-json?universeId=1884689868&page=1'
-		var VIPXHR = new XMLHttpRequest()
-		VIPXHR.open("GET", VIPLink, true);
-		VIPXHR.onreadystatechange = function() {
-			if(VIPXHR.readyState == 4) {
-				var servers = (JSON.parse(VIPXHR.responseText)).Instances
-				SubscriptionStatus = false
-				for(i=0;i<servers.length;i++){
-					if(servers[i].DoesBelongToUser && servers[i].PrivateServer.StatusType!=3){ //thanks roblox for inexplicably putting half the values in a PrivateServer wrapper
-						SubscriptionStatus = true
-						GetToken()
-						return
-					}
-				}
-			}
-		}
-		VIPXHR.send()
+	async function GetToken() {
+		let resp = await fetch('https://users.roblox.com/v1/users/1/status', {
+			method: 'PATCH',
+			headers: new Headers({'content-type': 'application/json'}),
+			body: JSON.stringify({status: ''})
+		})
+		
+		let token = resp.headers.get('x-csrf-token')
+		return token
 	}
 	
 	async function GetBotList() {
@@ -184,7 +161,8 @@ function DeclineBots() {
 			PBResult[PBResult.length][1] = BotList[k] // ???????????????
 		}
 		
-		CheckSubscription() // not going to go further than this
+		let token = await GetToken() // not going to go further than this
+		CompileInbounds(token)
 	}
 	
 	chrome.storage.local.get('isiton',function(isiton){
