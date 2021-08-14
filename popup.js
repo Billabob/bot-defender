@@ -1,15 +1,11 @@
-var print = console.log
 var TotalTime = "0:00"
 var SessionTime = "0:00"
-
-print("help")
 
 function run(){
 	chrome.runtime.sendMessage({
 			a:"lol"
 		}, function(declined) {
 		chrome.storage.local.get('isiton',function(isiton){
-			console.log(isiton)
 			if(isNaN(isiton['isiton'])){
 				isiton = true
 				chrome.storage.local.set({isiton:true});
@@ -17,7 +13,6 @@ function run(){
 			if(!isiton){
 				document.getElementById("onbutton").src=chrome.runtime.getURL('off.png')
 			}
-			console.log(declined)
 			var TotalDeclined; var TotalDeclined
 			if(declined == undefined){
 				declined = {total:0,sesh:0}
@@ -47,7 +42,6 @@ function run(){
 						totformat = "hours"
 					}
 				}
-				console.log(tottime)
 				return [tottime,totformat]
 			}
 			var aa = CalculateTime(declined.total);
@@ -81,5 +75,5 @@ function run(){
 }
 
 window.onload = function(){
-	setTimeout(run, 100)
+	run()
 }

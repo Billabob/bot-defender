@@ -1,4 +1,3 @@
-var print = console.log
 var TradesDeclinedTotal = 0
 var TradesDeclinedSession = 0
 var DecRunningTotal = 0
@@ -19,10 +18,9 @@ chrome.storage.local.get('FirstTime',function(firsttime){
 })
 
 chrome.runtime.onMessage.addListener(
-	function(request, sender, sendResponse) {
+	async function(request, sender, sendResponse) {
 		if (request.a == "lol"){
 			chrome.storage.local.get('TradesDeclinedTotal',function(result){
-				console.log(result)
 				var tot = result.TradesDeclinedTotal
 				if(isNaN(result.TradesDeclinedTotal)){
 					tot = 0
@@ -61,7 +59,7 @@ chrome.runtime.onMessage.addListener(
 				sendResponse(SubscriptionStatus);
 			}
 		}
-	return true
+		return true
 	}
 );
 

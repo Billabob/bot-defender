@@ -1,13 +1,8 @@
-var print = console.log
-
 function run(){
 	chrome.runtime.sendMessage({
 			a:"bots plz"
 		}, function(bots) {
 			
-		console.log(bots)
-		//document.getElementById("discordbutton").onclick = function(){chrome.tabs.create({'url': "https://discord.gg/B4WdMa" })}
-		//document.getElementById("subscribebutton").onclick = function(){chrome.tabs.create({'url': "https://www.roblox.com/games/1397656271/Tower-Climb#!/game-instances" })}
 		document.getElementById("showbots").onclick = function(){
 			document.getElementById("showbots").remove()
 			document.getElementById("botcol1").innerHTML="<b>User ID</b><br>"; 
@@ -41,5 +36,5 @@ function run(){
 }
 
 window.onload = function(){
-	setTimeout(run, 100)
+	run()
 }
