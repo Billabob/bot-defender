@@ -179,8 +179,6 @@ function DeclineBots() {
 				}else{
 					GlitchedTrades = glitched['GlitchedTrades']
 				}
-				print(GlitchedTrades)
-				print(Strikes)
 				GetBotList()
 			})
 		}
