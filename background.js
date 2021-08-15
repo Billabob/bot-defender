@@ -37,28 +37,6 @@ chrome.runtime.onMessage.addListener(
 		if(request.a == "resetlocal"){
 			TradesDeclinedSession = 0
 		}
-		if(request.a == "substatus"){
-			if(SubscriptionStatus=="unknown"){
-				var VIPLink = 'https://www.roblox.com/private-server/instance-list-json?universeId=1884689868&page=1'
-				var VIPXHR = new XMLHttpRequest()
-				VIPXHR.open("GET", VIPLink, true);
-				VIPXHR.onreadystatechange = function() {
-					if(VIPXHR.readyState == 4) {
-						var servers = (JSON.parse(VIPXHR.responseText)).Instances
-						SubscriptionStatus = false
-						for(i=0;i<servers.length;i++){
-							if(servers[i].DoesBelongToUser && servers[i].StatusType!=3){
-								SubscriptionStatus = true
-							}
-						}
-						sendResponse(SubscriptionStatus);
-					}
-				}
-				VIPXHR.send()
-			}else{
-				sendResponse(SubscriptionStatus);
-			}
-		}
 		return true
 	}
 );

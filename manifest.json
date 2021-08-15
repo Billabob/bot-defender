@@ -3,7 +3,7 @@
 
     "name": "Roblox Trade Bot Defender",
     "description": "Automatically declines trades from bots",
-    "version": "0.0.0.10",
+    "version": "0.0.0.12",
 
     "background": {
 		"scripts": ["background.js"],
@@ -17,7 +17,6 @@
 	},
 
     "permissions": [
-        "https://www.roblox.com/private-server/*",
         "https://trades.roblox.com/v1/trades/*",
         "https://users.roblox.com/v1/users/1/status",
         "https://gist.githubusercontent.com/*",
