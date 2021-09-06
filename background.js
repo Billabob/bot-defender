@@ -19,7 +19,8 @@ chrome.storage.local.get('FirstTime',function(firsttime){
 
 chrome.runtime.onMessage.addListener(
 	async function(request, sender, sendResponse) {
-		if (request.a == "lol"){
+		
+		if (request.getDeclined){
 			chrome.storage.local.get('TradesDeclinedTotal',function(result){
 				var tot = result.TradesDeclinedTotal
 				if(isNaN(result.TradesDeclinedTotal)){
@@ -31,12 +32,15 @@ chrome.runtime.onMessage.addListener(
 				});
 			})
 		}
+		
 		if(request.a == "bots plz"){
 			sendResponse(PBResult);
 		}
-		if(request.a == "resetlocal"){
+		
+		if(request.resetLocal){
 			TradesDeclinedSession = 0
 		}
+		
 		return true
 	}
 );
