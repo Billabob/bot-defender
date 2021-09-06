@@ -33,7 +33,7 @@ chrome.runtime.onMessage.addListener(
 			})
 		}
 		
-		if(request.a == "bots plz"){
+		if(request.showBots){
 			sendResponse(PBResult);
 		}
 		

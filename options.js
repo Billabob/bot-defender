@@ -1,6 +1,6 @@
 function run(){
 	chrome.runtime.sendMessage({
-			a:"bots plz"
+			showBots:true
 		}, function(bots) {
 			
 		document.getElementById("showbots").onclick = function(){
