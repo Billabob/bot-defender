@@ -20,19 +20,20 @@ chrome.storage.local.get('FirstTime',function(firsttime){
 chrome.runtime.onMessage.addListener(
 	async function(request, sender, sendResponse) {
 		if (request.getDeclined){
-			await new Promise(resolve => {
+			let result = await new Promise(resolve => {
 				chrome.storage.local.get('TradesDeclinedTotal',function(result){
-					var tot = result.TradesDeclinedTotal
-					if(isNaN(result.TradesDeclinedTotal)){
-						tot = 0
-					}
-					console.log(tot)
-					sendResponse({
-						total: tot,
-						sesh: TradesDeclinedSession
-					})
-					resolve()
+					resolve(result)
 				})
+			})
+			
+			var tot = result.TradesDeclinedTotal
+			if(isNaN(result.TradesDeclinedTotal)){
+				tot = 0
+			}
+			console.log(tot)
+			sendResponse({
+				total: tot,
+				sesh: TradesDeclinedSession
 			})
 		}
 		
