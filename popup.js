@@ -25,10 +25,6 @@ function CalculateTime(n){
 }
 
 async function run(){
-	await new Promise(resolve => {
-		setTimeout(function(){resolve(), 1000});
-	})
-	
 	let declined = await new Promise(resolve => {
         chrome.runtime.sendMessage({
             getDeclined: true
