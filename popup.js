@@ -24,7 +24,7 @@ function CalculateTime(n){
 	return [tottime,totformat]
 }
 
-function run(){
+async function run(){
 	let declined = await new Promise(resolve => {
         chrome.runtime.sendMessage({
             getDeclined: true
