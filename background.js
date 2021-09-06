@@ -18,29 +18,29 @@ chrome.storage.local.get('FirstTime',function(firsttime){
 })
 
 chrome.runtime.onMessage.addListener(
-	async function(request, sender, sendResponse) {
+	function(request, sender, sendResponse) {
 		if (request.getDeclined){
-			let result = await new Promise(resolve => {
-				chrome.storage.local.get('TradesDeclinedTotal',function(result){
-					resolve(result)
+			chrome.storage.local.get('TradesDeclinedTotal',function(result){
+				var tot = result.TradesDeclinedTotal
+				
+				if(isNaN(result.TradesDeclinedTotal)){
+					tot = 0
+				}
+				
+				console.log(tot)
+				
+				sendResponse({
+					total: tot,
+					sesh: TradesDeclinedSession
 				})
 			})
-			
-			var tot = result.TradesDeclinedTotal
-			if(isNaN(result.TradesDeclinedTotal)){
-				tot = 0
-			}
-			console.log(tot)
-			sendResponse({
-				total: tot,
-				sesh: TradesDeclinedSession
-			})
-		}
 		
 		if(request.showBots){ sendResponse(PBResult); }
 		if(request.resetLocal){ TradesDeclinedSession = 0 }
 		
 		return true
+		
+		}
 	}
 );
 
