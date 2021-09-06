@@ -43,8 +43,8 @@ async function run(){
 				document.getElementById("onbutton").src=chrome.runtime.getURL('off.png')
 			}
 			resolve(isiton)
-		}
-	}
+		})
+	})
 	
 	function _switch() {
 		var but = document.getElementById("onbutton")
