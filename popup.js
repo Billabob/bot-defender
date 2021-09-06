@@ -35,13 +35,13 @@ async function run(){
 	
 	let isiton = await new Promise(resolve => {
 		chrome.storage.local.get('isiton',function(isiton){
-			if(isNaN(isiton['isiton'])){
-				isiton = true
-				chrome.storage.local.set({isiton:true});
-			}else{isiton=isiton['isiton']}
+			isiton = isNaN(isiton['isiton']) || isiton=isiton['isiton']
+			chrome.storage.local.set({isiton:isiton});
+			
 			if(!isiton){
 				document.getElementById("onbutton").src=chrome.runtime.getURL('off.png')
 			}
+			
 			resolve(isiton)
 		})
 	})
