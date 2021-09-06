@@ -19,7 +19,6 @@ chrome.storage.local.get('FirstTime',function(firsttime){
 
 chrome.runtime.onMessage.addListener(
 	async function(request, sender, sendResponse) {
-		
 		if (request.getDeclined){
 			chrome.storage.local.get('TradesDeclinedTotal',function(result){
 				var tot = result.TradesDeclinedTotal
