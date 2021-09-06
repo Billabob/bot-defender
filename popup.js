@@ -1,10 +1,11 @@
 var TotalTime = "0:00"
 var SessionTime = "0:00"
-
+console.log("hi")
 function run(){
 	chrome.runtime.sendMessage({
 			a:"lol"
-		}, function(declined) {
+		}, async function(declined) {
+			console.log(declined)
 		chrome.storage.local.get('isiton',function(isiton){
 			if(isNaN(isiton['isiton'])){
 				isiton = true
@@ -71,6 +72,7 @@ function run(){
 			document.getElementById("column1").onmouseout = function(){time.style = "color:#202020"}
 			document.getElementById("column2").onmouseout = function(){time.style = "color:#202020"}
 		})
+		return true
 	})
 }
 

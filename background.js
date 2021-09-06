@@ -25,10 +25,19 @@ chrome.runtime.onMessage.addListener(
 				if(isNaN(result.TradesDeclinedTotal)){
 					tot = 0
 				}
-				sendResponse({
+				console.log(tot)
+				/*sendResponse({
 					total: tot,
 					sesh: TradesDeclinedSession
-				});
+				});*/
+				let stats = await new Promise(resolve => {
+					chrome.runtime.sendMessage({
+						total: tot,
+						sesh: TradesDeclinedSession
+					},function(response) {
+						resolve(response)
+					})
+				})
 			})
 		}
 		if(request.a == "bots plz"){
