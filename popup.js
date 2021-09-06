@@ -26,7 +26,7 @@ function CalculateTime(n){
 
 async function run(){
 	await new Promise(resolve => {
-		setTimeout(function(){resolve(), 5000});
+		setTimeout(function(){resolve(), 1000});
 	})
 	
 	let declined = await new Promise(resolve => {
