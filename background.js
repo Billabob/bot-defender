@@ -27,17 +27,9 @@ chrome.runtime.onMessage.addListener(
 					tot = 0
 				}
 				console.log(tot)
-				/*sendResponse({
+				sendResponse({
 					total: tot,
 					sesh: TradesDeclinedSession
-				});*/
-				let stats = await new Promise(resolve => {
-					chrome.runtime.sendMessage({
-						total: tot,
-						sesh: TradesDeclinedSession
-					},function(response) {
-						resolve(response)
-					})
 				})
 			})
 		}
