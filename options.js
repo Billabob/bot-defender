@@ -1,8 +1,7 @@
 function run(){
 	chrome.runtime.sendMessage({
-			showBots:true
-		}, function(bots) {
-			
+		showBots:true
+	}, function(bots) {
 		document.getElementById("showbots").onclick = function(){
 			document.getElementById("showbots").remove()
 			document.getElementById("botcol1").innerHTML="<b>User ID</b><br>"; 
@@ -30,7 +29,6 @@ function run(){
 				}
 			}
 			addbots(1); //yes i know arrays start at 0, i just don't want cotten eye joe displaying
-			
 		}
 	});
 }
@@ -38,3 +36,4 @@ function run(){
 window.onload = function(){
 	run()
 }
+
