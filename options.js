@@ -2,6 +2,7 @@ function run(){
 	chrome.runtime.sendMessage({
 		showBots:true
 	}, function(bots) {
+		document.getElementById("stat").innerHTML='There are ' + bots.length + ' known bot accounts and while we try our best to carefully investigate every user reported, mistakes do happen. Appeals can be made in our Discord server.'
 		document.getElementById("showbots").onclick = function(){
 			document.getElementById("showbots").remove()
 			document.getElementById("botcol1").innerHTML="<b>User ID</b><br>"; 
