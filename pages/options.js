@@ -13,10 +13,10 @@ function run(){
 				if(n<15){
 					setTimeout(function(){addbots(n+1)},100)
 				}else{
-					var rest = ""
-					var restN = ""
+					let rest = ""
+					let restN = ""
 					function add(n){
-						var x = n+15
+						let x = n+15
 						if(n<bots.length-15){
 							rest = rest+bots[x][0]+"<br>"
 							restN = restN+bots[x][1]+"<br>"

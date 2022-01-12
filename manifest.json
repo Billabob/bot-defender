@@ -6,7 +6,7 @@
 
     "background": {
         "scripts": [
-            "background.js"
+            "main.js"
         ],
         "persistent": true
     },
@@ -20,21 +20,22 @@
     ],     
 
     "icons": {
-        "16": "logo.png",
-        "48": "logo.png",
-        "128": "logo.png"
+        "16": "content/logo.png",
+        "48": "content/logo.png",
+        "128": "content/logo.png"
     },
 
     "permissions": [
         "https://trades.roblox.com/v1/trades/*",
         "https://users.roblox.com/v1/users/1/status",
         "https://gist.githubusercontent.com/*",
-        "storage"
+        "storage",
+        "tab"
     ],
 
     "browser_action": {
-        "default_icon": "logo.png",
-        "default_popup": "popup.html"
+        "default_icon": "content/logo.png",
+        "default_popup": "pages/popup.html"
     },
 
     "web_accessible_resources": [
