@@ -30,7 +30,7 @@
         "https://users.roblox.com/v1/users/1/status",
         "https://gist.githubusercontent.com/*",
         "storage",
-        "tab"
+        "tabs"
     ],
 
     "browser_action": {
