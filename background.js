@@ -92,6 +92,9 @@ async function GetBotList() {
 	for(let k in preBotList){
 		BotList[preBotList[k][0]] = preBotList[k][1]
 	}
+
+	// For the inbounds page
+	chrome.storage.local.set({'BotList': BotList})
 	
 	let token = await GetToken() // not going to go further than this
 	CompileInbounds(token)
