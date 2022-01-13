@@ -74,7 +74,7 @@ async function run(){
 	SessionTime = "Saved you "+res.local.time+" "+res.local.format+" in this session"
 	
 	document.getElementById("onbutton").onclick = function(){_switch()}
-	document.getElementById("help").onclick = function(){chrome.tabs.create({'url': "pages/options.html" })}
+	document.getElementById("help").onclick = function(){chrome.tabs.create({'url': "/pages/options.html" })}
 	document.getElementById("column1").onmousemove = function(){time.innerHTML = SessionTime; time.style = "color:#FFFFFF"}
 	document.getElementById("column2").onmousemove = function(){time.innerHTML = TotalTime; time.style = "color:#FFFFFF"}
 	document.getElementById("column1").onmouseout = function(){time.style = "color:#202020"}
