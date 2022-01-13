@@ -11,11 +11,10 @@ let botList = {}
 // Made by billabot
 // Join the discord server for bug reports and/or questions: discord.gg/qJpQdkW
 
-chrome.storage.local.get('FirstTime',function(result){
-	if(result.FirstTime == undefined){
-		alert("Welcome to Bot Defender! Please click the extension icon then click the blue 'i' for information on how to get this extension running.")
-		chrome.storage.local.set({FirstTime:false});
+chrome.runtime.onInstalled.addListener(function(result){
+	if (result.reason === chrome.runtime.OnInstalledReason.INSTALL) {
 		chrome.storage.local.set({TradesDeclinedTotal:0});
+		alert("Welcome to Bot Defender! Please click the extension icon then click the blue 'i' for information on how to get this extension running.")	
 	}
 })
 
