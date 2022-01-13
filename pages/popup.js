@@ -24,7 +24,7 @@ function CalculateTime(n){
 			total.time = "hours"
 		}
 	}
-	return total.time
+	return total
 }
 
 async function run(){
