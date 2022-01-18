@@ -21,7 +21,7 @@ function CalculateTime(n){
 			}else{
 				total.time = Math.floor(m/60)+":0"+m%60
 			}
-			total.time = "hours"
+			total.format = "hours"
 		}
 	}
 	return total
