@@ -56,7 +56,6 @@ async function run(){
 			chrome.storage.local.set({isiton:false});
 			document.getElementById("sesh").innerHTML = "0"
 			SessionTime = "Saved you 0 seconds in this session"
-			chrome.runtime.sendMessage({resetlocal:true});
 		}else{
 			but.src = buttons.on
 			chrome.storage.local.set({isiton:true});

@@ -32,7 +32,6 @@ chrome.runtime.onMessage.addListener(
 		}
 		
 		if(request.showBots){ sendResponse( raw_botList ) }
-		if(request.resetLocal){ TradesDeclinedSession = 0 }
 		
 		return true
 	}
@@ -45,6 +44,7 @@ async function initialise() {
 			if(result.isiton == undefined){
 				result.isiton = true
 				chrome.storage.local.set({isiton:true});
+			}else if(!result.isiton){
 				resolve(false)
 			}
 			
