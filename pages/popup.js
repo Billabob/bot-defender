@@ -1,5 +1,4 @@
-let TotalTime = "0:00"
-let SessionTime = "0:00"
+let timeSaved = { total: '', session: '' }
 let buttons = {
 	off: chrome.runtime.getURL('content/off.png'),
 	on: chrome.runtime.getURL('content/on.png'),
@@ -27,6 +26,18 @@ function CalculateTime(n){
 	return total
 }
 
+function _switch() {
+	// switch is a reserved word
+	let but = document.getElementById("onbutton")
+	if(but.src == buttons.on){
+		but.src = buttons.off
+		chrome.storage.local.set({isiton:false});
+	}else{
+		but.src = buttons.on
+		chrome.storage.local.set({isiton:true});
+	}
+}
+
 async function run(){
 	let declined = await new Promise(resolve => {
         chrome.runtime.sendMessage({
@@ -49,19 +60,6 @@ async function run(){
 		})
 	})
 	
-	function _switch() {
-		let but = document.getElementById("onbutton")
-		if(but.src == buttons.on){
-			but.src = buttons.off
-			chrome.storage.local.set({isiton:false});
-			document.getElementById("sesh").innerHTML = "0"
-			SessionTime = "Saved you 0 seconds in this session"
-		}else{
-			but.src = buttons.on
-			chrome.storage.local.set({isiton:true});
-		}
-	}
-	
 	if(declined == undefined){ declined = {total:0,sesh:0} }
 	if(document.getElementById("tot") == null){ return }
 	
@@ -69,13 +67,13 @@ async function run(){
 	document.getElementById("sesh").innerHTML = declined.sesh
 
 	let res = {total: CalculateTime(declined.total), local: CalculateTime(declined.sesh)}
-	TotalTime = "Saved you "+res.total.time+" "+res.total.format+" in total"
-	SessionTime = "Saved you "+res.local.time+" "+res.local.format+" in this session"
+	timeSaved.total = `Saved you ${res.total.time} ${res.total.format} in total`
+	timeSaved.session = `Saved you ${res.local.time} ${res.local.format} in this session`
 	
 	document.getElementById("onbutton").onclick = function(){_switch()}
 	document.getElementById("help").onclick = function(){chrome.tabs.create({'url': "pages/options.html" })}
-	document.getElementById("column1").onmousemove = function(){time.innerHTML = SessionTime; time.style = "color:#FFFFFF"}
-	document.getElementById("column2").onmousemove = function(){time.innerHTML = TotalTime; time.style = "color:#FFFFFF"}
+	document.getElementById("column1").onmousemove = function(){time.innerHTML = timeSaved.session; time.style = "color:#FFFFFF"}
+	document.getElementById("column2").onmousemove = function(){time.innerHTML = timeSaved.total; time.style = "color:#FFFFFF"}
 	document.getElementById("column1").onmouseout = function(){time.style = "color:#202020"}
 	document.getElementById("column2").onmouseout = function(){time.style = "color:#202020"}
 }

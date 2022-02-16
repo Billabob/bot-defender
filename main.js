@@ -1,6 +1,4 @@
-let TradesDeclinedTotal = 0
-let TradesDeclinedSession = 0
-let DecRunningTotal = 0
+let declined = { session: 0, running: 0 }
 let GlitchedTrades = {}
 let Strikes = {}
 let SubscriptionStatus = "unknown"
@@ -26,7 +24,7 @@ chrome.runtime.onMessage.addListener(
 				let tot = result.TradesDeclinedTotal || 0
 				sendResponse({
 					total: tot,
-					sesh: TradesDeclinedSession
+					sesh: declined.session
 				})
 			})
 		}
@@ -63,7 +61,7 @@ async function checkCache(){
 	return await new Promise(resolve => {
 		chrome.storage.local.get('TradesDeclinedTotal',function(result){
 			if(isNaN(result.TradesDeclinedTotal)){
-				chrome.storage.local.set({'TradesDeclinedTotal': Math.max(1,TradesDeclinedSession)}) // Sets # trades declined to 1 in case there's no saved stat
+				chrome.storage.local.set({'TradesDeclinedTotal': Math.max(1,declined.session)}) // Sets # trades declined to 1 in case there's no saved stat
 			}
 			resolve()
 		})
@@ -124,9 +122,9 @@ async function filterBots(inbounds){
 	await new Promise(resolve => {
 		setTimeout(function(){chrome.storage.local.get('TradesDeclinedTotal',function(result){
 			if(isNaN(result.TradesDeclinedTotal)){
-				chrome.storage.local.set({"TradesDeclinedTotal": Math.max(DecRunningTotal,TradesDeclinedSession)}) // Sets # trades declined to 1 in case there's no saved stat
+				chrome.storage.local.set({"TradesDeclinedTotal": Math.max(declined.running,declined.session)}) // Sets # trades declined to 1 in case there's no saved stat
 			}else{
-				chrome.storage.local.set({"TradesDeclinedTotal": result.TradesDeclinedTotal+DecRunningTotal})
+				chrome.storage.local.set({"TradesDeclinedTotal": result.TradesDeclinedTotal+declined.running})
 			}
 			resolve()
 		})},1000)
@@ -141,8 +139,8 @@ async function declineTrade(id) {
 	})
 	
 	if(resp.status == 200){
-		TradesDeclinedSession++ // Adds one to # of trades declined this session
-		DecRunningTotal++ // Adds another to the total
+		declined.session++ // Adds one to # of trades declined this session
+		declined.running++ // Adds another to the total
 	}
 
 	if(resp.status == 400){
