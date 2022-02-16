@@ -1,3 +1,5 @@
+let bots = []
+
 function addbots(n){
 	// bad code
 	document.getElementById("botcol1").innerHTML=document.getElementById("botcol1").innerHTML+bots[n][0]+"<br>";
@@ -22,11 +24,12 @@ function addbots(n){
 	}
 }
 
-function run(){
+function main(){
 	chrome.runtime.sendMessage({
-		showBots:true
-	}, function(bots) {
-		document.getElementById("stat").innerHTML='There are ' + bots.length + ' known bot accounts and while we try our best to carefully investigate every user reported, mistakes do happen. Appeals can be made in our Discord server.'
+		showBots: true
+	}, function(_bots) {
+		bots = _bots
+		document.getElementById("stat").innerHTML=`There are ${bots.length} known bot accounts and while we try our best to carefully investigate every user reported, mistakes do happen. Appeals can be made in our Discord server.`
 		document.getElementById("showbots").onclick = function(){
 			document.getElementById("showbots").remove()
 			document.getElementById("botcol1").innerHTML="<b>User ID</b><br>"; 
@@ -37,6 +40,6 @@ function run(){
 }
 
 window.onload = function(){
-	run()
+	main()
 }
 
