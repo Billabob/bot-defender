@@ -83,15 +83,10 @@ async function getBotList() {
 	chrome.storage.local.set({'BotList': botList})
 }
 
-// Tries to set the status of id=1 (Roblox) to nothing. This will fail obviously but I will get the validation token.
+// Tries to decline a trade with the ID 1. This will fail obviously but I will get the validation token.
 // The token is needed to actually execute an action such as declining a trade
 async function authenticate() {
-	let resp = await fetch('https://users.roblox.com/v1/users/1/status', {
-		method: 'PATCH',
-		headers: new Headers({'content-type': 'application/json'}),
-		body: JSON.stringify({status: ''})
-	})
-	
+	let resp = await fetch(`https://trades.roblox.com/v1/trades/1/decline`, {method: 'post'})
 	csrf_token = resp.headers.get('x-csrf-token')
 	return csrf_token
 }
