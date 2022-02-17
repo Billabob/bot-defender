@@ -118,7 +118,7 @@ async function filterBots(inbounds){
 	})
 }
 
-async function declineTrade(id) {
+async function declineTrade(id, ttl = 5) {
 	let resp = await fetch(`https://trades.roblox.com/v1/trades/${id}/decline`,{
 		method: 'POST',
 		headers: new Headers({'X-CSRF-TOKEN':  csrf_token}),
@@ -139,22 +139,31 @@ async function declineTrade(id) {
 
 	if(resp.status == 403){
 		let _json = await resp.json();
-		if(_json.errors && _json.errors[0].code == 0){
+		if(_json.errors && _json.errors[0].code == 0 && ttl >= 0){
 			// csrf token (which is needed to execute an action) is outdated and we need to get a new one and retry
 			csrf_token = resp.headers.get('x-csrf-token')
-			await declineTrade(id);
+			await declineTrade(id, ttl--);
 		}
 	}
 }
 
-async function main(){
-	let initialised = await initialise()
-	if(!initialised){return} // extension turned off
+let running = false;
 
-	await checkCache()
-	await getBotList()
-	let trades = await compileInbounds()
-	await filterBots(trades)
+async function main(){
+	if(running){ return }
+	try {
+		let initialised = await initialise()
+		if(!initialised){return} // extension turned off
+		running = true;
+		await checkCache()
+		await getBotList()
+		let trades = await compileInbounds()
+		await filterBots(trades)
+	} catch {
+		// catch exception error etc
+	} finally {
+		running = false;
+	}
 }
 
 main();
