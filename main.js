@@ -77,7 +77,7 @@ async function filterBots(inbounds){
 	if(isNaN(res)){
 		chrome.storage.local.set({"TradesDeclinedTotal": Math.max(declined.running,declined.session)}) // Sets # trades declined to 1 in case there's no saved stat
 	}else{
-		chrome.storage.local.set({"TradesDeclinedTotal": result.TradesDeclinedTotal+declined.running})
+		chrome.storage.local.set({"TradesDeclinedTotal": res + declined.running})
 	}
 }
 
