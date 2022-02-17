@@ -4,6 +4,12 @@ let buttons = {
 	on: chrome.runtime.getURL('content/on.png'),
 }
 
+async function localGet(key){
+	return await new Promise(resolve => { chrome.storage.local.get(key,function(result){
+		resolve(result)
+	})})
+}
+
 function CalculateTime(n){
 	let total = {format: "seconds", time: n*5}
 	if(total.time>59){
@@ -39,34 +45,21 @@ function _switch() {
 }
 
 async function run(){
-	let declined = await new Promise(resolve => {
-        chrome.runtime.sendMessage({
-            getDeclined: true
-        },function(response) {
-            resolve(response)
-        })
-    })
-	
-	await new Promise(resolve => {
-		chrome.storage.local.get('isiton',function(result){
-			let isiton = isNaN(result.isiton) || result.isiton
-			chrome.storage.local.set({isiton:isiton});
-			
-			if(!isiton){
-				document.getElementById("onbutton").src = buttons.off
-			}
-			
-			resolve(isiton)
-		})
-	})
-	
-	if(declined == undefined){ declined = {total:0,sesh:0} }
-	if(document.getElementById("tot") == null){ return }
-	
-	document.getElementById("tot").innerHTML = declined.total
-	document.getElementById("sesh").innerHTML = declined.sesh
+	let declined = {
+		total: (await localGet('TradesDeclinedTotal').then(res => res.TradesDeclinedTotal || 0)),
+		session: (await new Promise(r => { chrome.runtime.sendMessage({getSessionDeclined:true}, (response) => { r(response) })}))
+	};
 
-	let res = {total: CalculateTime(declined.total), local: CalculateTime(declined.sesh)}
+	let isiton = await localGet('isiton').then(res => isNaN(res.isiton) || res.isiton)
+	if(!isiton){ document.getElementById("onbutton").src = buttons.off }
+	
+	if(declined == undefined){ declined = {total:0,session:0} }
+	if(document.getElementById("total") == null){ return }
+	
+	document.getElementById("total").innerHTML = declined.total
+	document.getElementById("session").innerHTML = declined.session
+
+	let res = {total: CalculateTime(declined.total), local: CalculateTime(declined.session)}
 	timeSaved.total = `Saved you ${res.total.time} ${res.total.format} in total`
 	timeSaved.session = `Saved you ${res.local.time} ${res.local.format} in this session`
 	
