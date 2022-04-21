@@ -5,9 +5,15 @@ let buttons = {
 }
 
 async function localGet(key){
-	return await new Promise(resolve => { chrome.storage.local.get(key,function(result){
-		resolve(result)
-	})})
+	return await new Promise(resolve => { 
+		chrome.storage.local.get(key,function(result){ resolve(result) })
+	})
+}
+
+async function localSet(key, data){
+	return await new Promise(resolve => {
+		chrome.storage.local.set({[array]: data}, function(result){ resolve(result) })
+	})
 }
 
 function CalculateTime(n){
@@ -37,10 +43,10 @@ function _switch() {
 	let but = document.getElementById("onbutton")
 	if(but.src == buttons.on){
 		but.src = buttons.off
-		chrome.storage.local.set({isiton:false});
+		await localSet('isiton', false)
 	}else{
 		but.src = buttons.on
-		chrome.storage.local.set({isiton:true});
+		await localSet('isiton', true)
 	}
 }
 

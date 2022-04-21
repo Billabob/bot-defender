@@ -7,15 +7,23 @@ let csrf_token
 // Join the discord server for bug reports and/or questions: discord.gg/qJpQdkW
 
 async function localGet(key){
-	return await new Promise(resolve => { chrome.storage.local.get(key,function(result){ resolve(result) })})
+	return await new Promise(resolve => { 
+		chrome.storage.local.get(key,function(result){ resolve(result) })
+	})
+}
+
+async function localSet(key, data){
+	return await new Promise(resolve => {
+		chrome.storage.local.set({[array]: data}, function(result){ resolve(result) })
+	})
 }
 
 localGet('FirstTime')
 .then(res => {
 	if(res.FirstTime == undefined){
 		alert("Welcome to Bot Defender! Please click the extension icon then click the blue 'i' for information on how to get this extension running.")
-		chrome.storage.local.set({FirstTime:false});
-		chrome.storage.local.set({TradesDeclinedTotal:0});
+		await localSet('FirstTime', false)
+		await localSet('TradesDeclinedTotal', 0)
 	}
 })
 
@@ -29,7 +37,7 @@ async function initialise() {
 	let enabled = await localGet('isiton').then(res => res.isiton)
 	if(enabled == undefined){
 		enabled = true
-		chrome.storage.local.set({isiton:true});
+		await localSet('isiton', true)
 	}
 
 	GlitchedTrades = await localGet('GlitchedTrades').then(res => res.GlitchedTrades || {})
@@ -39,7 +47,7 @@ async function initialise() {
 async function checkCache(){
 	let res = await localGet('TradesDeclinedTotal').then(res => res.TradesDeclinedTotal)
 	if(!isNaN(res)){ return true }
-	chrome.storage.local.set({'TradesDeclinedTotal': Math.max(1,declined.session)}) // Sets # trades declined to 1 in case there's no saved stat
+	await localSet('TradesDeclinedTotal', Math.max(1,declined.session)) // Sets # trades declined to 1 in case there's no saved stat
 }
 
 async function getBotList() {
@@ -49,7 +57,7 @@ async function getBotList() {
 	for(let k in result){
 		botList[result[k][0]] = result[k][1]
 	}
-	chrome.storage.local.set({'BotList': botList}) 	// For the inbounds page
+	await localSet('BotList', botList) // For the inbounds page
 }
 
 // Get all inbound trades
@@ -75,9 +83,9 @@ async function filterBots(inbounds){
 
 	let res = await localGet('TradesDeclinedTotal').then(res => res.TradesDeclinedTotal)
 	if(isNaN(res)){
-		chrome.storage.local.set({"TradesDeclinedTotal": Math.max(declined.running,declined.session)}) // Sets # trades declined to 1 in case there's no saved stat
+		await localSet('TradesDeclinedTotal', Math.max(declined.running,declined.session)) // Sets # trades declined to 1 in case there's no saved stat
 	}else{
-		chrome.storage.local.set({"TradesDeclinedTotal": res + declined.running})
+		await localSet('TradesDeclinedTotal', res + declined.running)
 	}
 }
 
@@ -94,7 +102,7 @@ async function declineTrade(id, ttl = 5) {
 		Strikes[id] = Strikes[id] + 1 || 1
 		if(Strikes[id]==3){ //third strike, stop attempting to decline
 			GlitchedTrades[id]=true
-			chrome.storage.local.set({GlitchedTrades:GlitchedTrades})
+			await localSet(GlitchedTrades, GlitchedTrades)
 		}
 	}else if(resp.status == 403){
 		let _json = await resp.json();
