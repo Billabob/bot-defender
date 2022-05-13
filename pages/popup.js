@@ -38,7 +38,7 @@ function CalculateTime(n){
 	return total
 }
 
-function _switch() {
+async function _switch() {
 	// switch is a reserved word
 	let but = document.getElementById("onbutton")
 	if(but.src == buttons.on){
