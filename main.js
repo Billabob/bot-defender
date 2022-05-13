@@ -19,7 +19,7 @@ async function localSet(key, data){
 }
 
 localGet('FirstTime')
-.then(res => {
+.then(async res => {
 	if(res.FirstTime == undefined){
 		alert("Welcome to Bot Defender! Please click the extension icon then click the blue 'i' for information on how to get this extension running.")
 		await localSet('FirstTime', false)
