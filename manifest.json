@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "Roblox Trade Bot Defender",
     "description": "Automatically declines trades from bots",
-    "version": "0.0.0.19",
+    "version": "0.0.0.22",
 
     "background": {
         "scripts": [
@@ -20,9 +20,10 @@
     ],
 
     "icons": {
-        "16": "content/logo.png",
-        "48": "content/logo.png",
-        "128": "content/logo.png"
+        "16": "content/icon16.png",
+        "48": "content/icon48.png",
+        "128": "content/icon128.png",
+        "512": "content/icon512.png"
     },
 
     "permissions": [
@@ -32,7 +33,7 @@
     ],
 
     "browser_action": {
-        "default_icon": "content/logo.png",
+        "default_icon": "content/icon512.png",
         "default_popup": "pages/popup.html"
     },
 
