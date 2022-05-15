@@ -14,7 +14,7 @@
     "content_scripts": [
         {
           "run_at": "document_start",
-          "matches": ["https://www.roblox.com/trades"],
+          "matches": ["https://www.roblox.com/*"],
           "js": ["content/botIcon.js"]
         }
     ],
