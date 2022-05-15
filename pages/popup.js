@@ -1,3 +1,4 @@
+let firefox = typeof browser != 'undefined'
 let timeSaved = { total: '', session: '' }
 let buttonImages = {
 	off: chrome.runtime.getURL('content/off.png'),
@@ -66,8 +67,16 @@ async function getDeclined(){
 	// Arrange object
 	let declined = {
 		total: (await localGet('TradesDeclinedTotal').then(res => res.TradesDeclinedTotal || 0)),
-		session: (await new Promise(r => { chrome.runtime.sendMessage({getSessionDeclined:true}, (response) => { r(response) })}))
 	};
+
+	// Pings the browser for the # of trades declined this session
+	if(firefox){
+		declined.session = await chrome.runtime.sendMessage({getSessionDeclined:true})
+	}else{
+		declined.session = await new Promise(r => { 
+			chrome.runtime.sendMessage({getSessionDeclined:true}, (response) => { r(response) })
+		})
+	}
 
 	// Check if object exists
 	if(declined == undefined){ declined = {total:0,session:0} }
@@ -100,7 +109,13 @@ function displayTimeSaved(declined){
 function mouseHandlers(){
 	// What the hell?
 	document.getElementById("onbutton").onclick = function(){_switch()}
-	document.getElementById("help").onclick = function(){chrome.tabs.create({'url': "pages/options.html" })}
+	document.getElementById("help").onclick = function(){
+		if(firefox){
+			chrome.tabs.create({'url': "options.html" })
+		}else{
+			chrome.tabs.create({'url': "pages/options.html" })
+		}
+	}
 	document.getElementById("column1").onmouseout = function(){time.style = "color:#202020"}
 	document.getElementById("column2").onmouseout = function(){time.style = "color:#202020"}
 	

@@ -1,3 +1,4 @@
+let firefox = typeof browser != 'undefined'
 let bots = []
 let usernameColumn;
 let idColumn;
@@ -40,7 +41,11 @@ function displayBots(){
 }
 
 async function getBotList(){
-	// Pings chrome with {showBots: true} and returns the awaited response
+	// Pings the browser with {showBots: true} and returns the awaited response
+	if(firefox){
+		return await browser.runtime.sendMessage({showBots: true})
+	}
+
 	return await new Promise(resolve => {
 		chrome.runtime.sendMessage({
 			showBots: true

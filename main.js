@@ -1,3 +1,4 @@
+let firefox = typeof browser != 'undefined'
 let declined = { session: 0, running: 0 }
 let GlitchedTrades = {}, Strikes = {}
 let raw_botList = {}, botList = {}
@@ -9,10 +10,17 @@ let csrfToken
 // Chrome Listener
 chrome.runtime.onMessage.addListener( async function(request, sender, sendResponse) {	
 	// Request to get session declined from popup.js	
-	if(request.getSessionDeclined){ sendResponse(declined.session) }
+	if(request.getSessionDeclined){
+		if(firefox){ return Promise.resolve(declined.session); }
+
+		sendResponse(declined.session)
+	}
 
 	// Request to show bots from options.js
-	if(request.showBots){ sendResponse(raw_botList) }
+	if(request.showBots){
+		if(firefox){ return Promise.resolve(raw_botList); }
+		sendResponse(raw_botList)
+	}
 })
 
 async function localGet(key){
