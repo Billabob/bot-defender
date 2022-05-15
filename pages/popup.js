@@ -109,13 +109,7 @@ function displayTimeSaved(declined){
 function mouseHandlers(){
 	// What the hell?
 	document.getElementById("onbutton").onclick = function(){_switch()}
-	document.getElementById("help").onclick = function(){
-		if(firefox){
-			chrome.tabs.create({'url': "options.html" })
-		}else{
-			chrome.tabs.create({'url': "pages/options.html" })
-		}
-	}
+	document.getElementById("help").onclick = function(){ chrome.tabs.create({'url': "/pages/options.html" }) }
 	document.getElementById("column1").onmouseout = function(){time.style = "color:#202020"}
 	document.getElementById("column2").onmouseout = function(){time.style = "color:#202020"}
 	
