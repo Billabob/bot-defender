@@ -71,7 +71,7 @@ async function getDeclined(){
 
 	// Pings the browser for the # of trades declined this session
 	if(firefox){
-		declined.session = await chrome.runtime.sendMessage({getSessionDeclined:true})
+		declined.session = await browser.runtime.sendMessage({getSessionDeclined:true})
 	}else{
 		declined.session = await new Promise(r => { 
 			chrome.runtime.sendMessage({getSessionDeclined:true}, (response) => { r(response) })
