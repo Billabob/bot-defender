@@ -109,7 +109,7 @@ function mouseHandlers(){
 		time.style = "color:#FFFFFF";
 	}
 	document.getElementById("column2").onmousemove = function(){
-		time.innerHTML = timeSaved.total;
+		time.firstChild.nodeValue = timeSaved.total;
 		time.style = "color:#FFFFFF";
 	}
 }
