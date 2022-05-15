@@ -1,10 +1,27 @@
+let firefox = typeof browser != 'undefined'
 let declined = { session: 0, running: 0 }
 let GlitchedTrades = {}, Strikes = {}
 let raw_botList = {}, botList = {}
-let csrf_token
+let csrfToken
 
 // Made by billabot
 // Join the discord server for bug reports and/or questions: discord.gg/qJpQdkW
+
+// Chrome Listener
+chrome.runtime.onMessage.addListener( async function(request, sender, sendResponse) {	
+	// Request to get session declined from popup.js	
+	if(request.getSessionDeclined){
+		if(firefox){ return Promise.resolve(declined.session); }
+
+		sendResponse(declined.session)
+	}
+
+	// Request to show bots from options.js
+	if(request.showBots){
+		if(firefox){ return Promise.resolve(raw_botList); }
+		sendResponse(raw_botList)
+	}
+})
 
 async function localGet(key){
 	return await new Promise(resolve => { 
@@ -14,26 +31,25 @@ async function localGet(key){
 
 async function localSet(key, data){
 	return await new Promise(resolve => {
-		chrome.storage.local.set({[array]: data}, function(result){ resolve(result) })
+		chrome.storage.local.set({[key]: data}, function(result){ resolve(result) })
 	})
 }
 
-localGet('FirstTime')
-.then(res => {
-	if(res.FirstTime == undefined){
-		alert("Welcome to Bot Defender! Please click the extension icon then click the blue 'i' for information on how to get this extension running.")
-		await localSet('FirstTime', false)
-		await localSet('TradesDeclinedTotal', 0)
-	}
-})
+async function checkFirstTime(){
+	// Get FirstTime saved variable
+	let firstTime = await localGet(`FirstTime`)
 
-chrome.runtime.onMessage.addListener( async function(request, sender, sendResponse) {			
-	if(request.getSessionDeclined){ sendResponse(declined.session) }
-	if(request.showBots){ sendResponse(raw_botList) }
-})
+	// If not undefined then return
+	if(firstTime.FirstTime != undefined){ return }
+
+	// Alert and set FirstTime to false
+	alert("Welcome to Bot Defender! Please click the extension icon then click the blue 'i' for information on how to get this extension running.")
+	await localSet('FirstTime', false)
+	await localSet('TradesDeclinedTotal', 0)
+}
 
 async function initialise() {
-	// initialise
+	// Initialise extension
 	let enabled = await localGet('isiton').then(res => res.isiton)
 	if(enabled == undefined){
 		enabled = true
@@ -92,23 +108,23 @@ async function filterBots(inbounds){
 async function declineTrade(id, ttl = 5) {
 	let resp = await fetch(`https://trades.roblox.com/v1/trades/${id}/decline`,{
 		method: 'POST',
-		headers: new Headers({'X-CSRF-TOKEN':  csrf_token}),
+		headers: new Headers({'X-CSRF-TOKEN':  csrfToken}),
 	})
 	
 	if(resp.status == 200){
 		declined.session++; declined.running++ // Adds one to # of trades declined this session and total
-		return true // return success
+		return true // Return success
 	}else if(resp.status == 400){
 		Strikes[id] = Strikes[id] + 1 || 1
-		if(Strikes[id]==3){ //third strike, stop attempting to decline
+		if(Strikes[id]==3){ // Third strike, stop attempting to decline
 			GlitchedTrades[id]=true
 			await localSet(GlitchedTrades, GlitchedTrades)
 		}
 	}else if(resp.status == 403){
 		let _json = await resp.json();
 		if(_json.errors && _json.errors[0].code == 0 && ttl >= 0){
-			// csrf token (which is needed to execute an action) is outdated and we need to get a new one and retry
-			csrf_token = resp.headers.get('x-csrf-token')
+			// CSRF token (which is needed to execute an action) is outdated and we need to get a new one and retry
+			csrfToken = resp.headers.get('x-csrf-token')
 			await declineTrade(id, ttl-1);
 		}else{
 			throw `403 @ trades/${id}/decline` // throw error
@@ -121,6 +137,7 @@ let running = false;
 async function main(){
 	if(running){ return }
 	try {
+		await checkFirstTime();
 		let initialised = await initialise()
 		if(!initialised){return} // extension turned off
 		running = true;
@@ -135,6 +152,6 @@ async function main(){
 	}
 }
 
-getBotList(); 
-main(); // get bot list once
-setInterval(main, 1 * 1000 * 60); // run main() every 60 seconds
+getBotList(); // Get bot list once
+main();
+setInterval(main, 1 * 1000 * 60); // Run main() every 60 seconds
