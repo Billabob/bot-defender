@@ -4,10 +4,12 @@
 <meta charset="UTF-8">
 
 <style>
-	.centered {
-		text-align: center; 
+	.white-text {
 		line-height:0.9;
 		color:white;
+	}
+	.centered {
+		text-align: center; 
 	}
 	.bold {
 		font-weight: bold;
@@ -15,11 +17,15 @@
 	.small {
 		font-size: 12px;
 	}
+	.full-width {
+		min-width: 100%;
+		min-height: 2px
+	}
 	body {
-	  min-width: 250px;
-	  max-width: 50%;
-	  position: relative;
-	  vertical-align:middle;
+		min-width: 250px;
+		max-width: 50%;
+		position: relative;
+		vertical-align:middle;
 	}
 	.on {
 		display: block;
@@ -37,18 +43,21 @@
 </style>
 
 <body style="background-color:#202020; font-family:'Segoe UI'">
-	<input type="image" id="onbutton" class="on" src="../content/on.png" alt="Submit" width="30" height="40" style="outline:none">
 	<input type="image" id="help" src="../content/infoi.png" alt="Info" width="20" height="20" style="position:absolute;right:0;top:0;outline:none">
+	<input type="image" id="discord" src="../content/discordicon.png" alt="Info" width="20" height="20" style="position:absolute;right:25px;top:0;outline:none">
+	<input type="image" id="patreon" src="../content/patreonicon.png" alt="Info" width="20" height="20" style="position:absolute;right:50px;top:0;outline:none">
+	<div class="full-width"></div>
+	<input type="image" id="onbutton" class="on" src="../content/on.png" alt="Submit" width="30" height="40" style="outline:none;">
 	<br>
-	<h3 class="centered">Trades declined:</h3>
+	<h3 class="centered white-text">Trades declined:</h3>
 	<div class="row">
 		<div class="column" id="column1">
-			<h4 class="centered">This session:</h4>
-			<h1 class="centered" id = "session">X</h1>
+			<h4 class="centered white-text">This session:</h4>
+			<h1 class="centered white-text" id = "session">X</h1>
 		</div>
 		<div class="column" id="column2">
-			<h4 class="centered">All time:</h4>
-			<h1 class="centered" id="total">Y</h1>
+			<h4 class="centered white-text">All time:</h4>
+			<h1 class="centered white-text" id="total">Y</h1>
 		</div>
 	</div>
 	<div class="centered bold small" style="color:#202020" id="time">invisible</div>

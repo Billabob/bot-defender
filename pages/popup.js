@@ -110,6 +110,8 @@ function mouseHandlers(){
 	// What the hell?
 	document.getElementById("onbutton").onclick = function(){_switch()}
 	document.getElementById("help").onclick = function(){ chrome.tabs.create({'url': "/pages/options.html" }) }
+	document.getElementById("discord").onclick = function(){ chrome.tabs.create({'url': "https://discord.gg/qJpQdkW" }) }
+	document.getElementById("patreon").onclick = function(){ chrome.tabs.create({'url': "https://www.patreon.com/TradeBotDefender" }) }
 	document.getElementById("column1").onmouseout = function(){time.style = "color:#202020"}
 	document.getElementById("column2").onmouseout = function(){time.style = "color:#202020"}
 	
