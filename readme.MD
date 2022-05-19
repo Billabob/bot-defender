@@ -5,6 +5,7 @@
 [![Discord](https://img.shields.io/discord/733399004515270676?label=Discord&style=flat&logo=discord)](https://discord.gg/qJpQdkW)
 [![Issues](https://img.shields.io/github/issues/codetariat/bot-defender?style=flat&label=Issues)](https://github.com/codetariat/bot-defender/issues)
 [![Support me on Patreon](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.vercel.app%2Fapi%3Fusername%3DTradeBotDefender%26type%3Dpatrons&style=flat)](https://patreon.com/TradeBotDefender)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/codetariat/bot-defender.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/codetariat/bot-defender/context:javascript)
 
 # Roblox Bot Defender
 

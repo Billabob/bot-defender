@@ -78,8 +78,9 @@ async function getDeclined(){
 		})
 	}
 
-	// Check if object exists
-	if(declined == undefined){ declined = {total:0,session:0} }
+	// Check if object values exist, otherwise make them 0
+	declined.total = declined.total || 0;
+	declined.session = declined.session || 0;
 	
 	return declined
 }
