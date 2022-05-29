@@ -3,6 +3,7 @@ let declined = { session: 0, running: 0 }
 let GlitchedTrades = {}, Strikes = {}
 let raw_botList = {}, botList = {}, whitelist = {}
 let csrfToken
+let patron = false;
 
 // Made by billabot
 // Join the discord server for bug reports and/or questions: discord.gg/qJpQdkW
@@ -34,23 +35,24 @@ async function localSet(key, data){
 	})
 }
 
-// this function checks if user is a patron
+// This function checks if user is a patron
 async function isPatron(){
-	let patron = false;
+	let isPatron = false;
 	let res = await fetch(`https://www.patreon.com/api/pledges`)
 	.then(res => res.json())
 	.then(res => res.data)
 
 	for(let k in res){
 		if(res[k].relationships.creator.data.id == `17441190` && res[k].attributes.amount_cents > `99`){
-			patron = true
+			isPatron = true
 			break;
 		}
 	}
 
-	localSet('isPatron', patron)
+	localSet('isPatron', isPatron)
+	patron = isPatron; // Set global variable
 
-	if(!patron){ return }
+	if(!isPatron){ return }
 	
 	let whitelistObject = await localGet('whitelist').then(res => res.whitelist || [])
 	whitelist = {}
@@ -93,6 +95,7 @@ async function checkCache(){
 	await localSet('TradesDeclinedTotal', Math.max(1,declined.session)) // Sets # trades declined to 1 in case there's no saved stat
 }
 
+// This function gets the bot list from the gist and saves it to local storage
 async function getBotList() {
 	let result = await fetch('https://gist.githubusercontent.com/codetariat/03043d47689a6ee645366d327b11944c/raw/').then(res=>res.json())
 	raw_botList = result
@@ -120,7 +123,7 @@ async function filterBots(inbounds){
 	declined.running = 0;
 	for(let k in inbounds){
 		if(GlitchedTrades[inbounds[k].id]){ continue }
-		if(whitelist[inbounds[k].user.id]){ continue }
+		if(whitelist[inbounds[k].user.id] && patron){ continue }
 		if(botList[inbounds[k].user.id]){ // If the sender is on the bot list... then decline
 			await declineTrade(inbounds[k].id)
 		}
