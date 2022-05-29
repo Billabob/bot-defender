@@ -36,14 +36,13 @@ async function localSet(key, data){
 
 // this function checks if user is a patron
 async function isPatron(){
-	let patron = false;
+	let patron = true;
 	let res = await fetch(`https://www.patreon.com/api/pledges`)
 	.then(res => res.json())
 	.then(res => res.data)
 
 	for(let k in res){
-		//if(res[k].relationships.creator.data.id == `17441190` && res[k].attributes.amount_cents > `99`){
-		if(1+1 == 2){
+		if(res[k].relationships.creator.data.id == `17441190` && res[k].attributes.amount_cents > `99`){
 			patron = true
 			break;
 		}

@@ -72,10 +72,7 @@ async function loadSavedWhitelist(){
 
 // this function saves the whitelist to local storage upon clicking the save button
 async function saveWhitelist(){
-    
     let input = whitelistInput.value;
-    if(!input){ return }
-
     let splitInput = input.split(`\n`)
     let userArray = []
     if(splitInput[0].split(',').length < 2){ userArray = []; return }
