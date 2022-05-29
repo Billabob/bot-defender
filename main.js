@@ -3,6 +3,7 @@ let declined = { session: 0, running: 0 }
 let GlitchedTrades = {}, Strikes = {}
 let raw_botList = {}, botList = {}
 let csrfToken
+let patron = false;
 
 // Made by billabot
 // Join the discord server for bug reports and/or questions: discord.gg/qJpQdkW
@@ -12,7 +13,6 @@ chrome.runtime.onMessage.addListener( async function(request, sender, sendRespon
 	// Request to get session declined from popup.js	
 	if(request.getSessionDeclined){
 		if(firefox){ return Promise.resolve(declined.session); }
-
 		sendResponse(declined.session)
 	}
 
@@ -20,6 +20,18 @@ chrome.runtime.onMessage.addListener( async function(request, sender, sendRespon
 	if(request.showBots){
 		if(firefox){ return Promise.resolve(raw_botList); }
 		sendResponse(raw_botList)
+	}
+
+	// Request to show whitelisted bots from config.js
+	if(request.showWhitelisted){
+		if(firefox){ return Promise.resolve(botList); }
+		sendResponse(botList)
+	}
+
+	// Request patron variable
+	if(request.getPatron){
+		if(firefox){ return Promise.resolve(patron); }
+		sendResponse(patron)
 	}
 })
 
@@ -33,6 +45,19 @@ async function localSet(key, data){
 	return await new Promise(resolve => {
 		chrome.storage.local.set({[key]: data}, function(result){ resolve(result) })
 	})
+}
+
+async function isPatron(){
+	let res = await fetch(`https://www.patreon.com/TradeBotDefender`)
+	.then(res => res.text())
+	.then(res => res.includes(`Become a patron`))
+	.catch(err => { console.trace(`CAUGHT ERROR: ${err}`) })
+
+	patron = !res;
+
+	if(!patron){ localSet('isPatron', false) }
+
+	localSet('isPatron', true)
 }
 
 async function checkFirstTime(){
@@ -137,21 +162,24 @@ let running = false;
 async function main(){
 	if(running){ return }
 	try {
-		await checkFirstTime();
-		let initialised = await initialise()
-		if(!initialised){return} // extension turned off
+		await isPatron(); // Check if user is a patron
+		await checkFirstTime(); // Check if user is running the extension for the first time
+		let initialised = await initialise() // Initialise extension
+		if(!initialised){return} // Extension is turned off
 		running = true;
 		await checkCache()
 		await getBotList()
 		let trades = await compileInbounds()
 		await filterBots(trades)
-	} catch {
-		// catch exception error etc
+	} catch (err) {
+		// Catch exception error
+		console.trace(`CAUGHT ERROR: ${err}`)
 	} finally {
 		running = false;
 	}
 }
 
 getBotList(); // Get bot list once
+isPatron(); // Check if user is a patron
 main();
 setInterval(main, 1 * 1000 * 60); // Run main() every 60 seconds

@@ -116,6 +116,14 @@ function mouseHandlers(){
 	document.getElementById("column1").onmouseout = function(){time.style = "color:#202020"}
 	document.getElementById("column2").onmouseout = function(){time.style = "color:#202020"}
 	
+	document.getElementById("whitelist-button").onclick = function(){
+		let patron = await localGet('isPatron').then(res => { res.isPatron })
+		// If user is patron then show config.html file
+		if(patron){ chrome.tabs.create({'url': "/pages/config.html" }); return }
+		// If not show patreon.html file
+		chrome.tabs.create({'url': "/pages/patreon.html" })
+	}
+
 	document.getElementById("column1").onmousemove = function(){
 		time.firstChild.nodeValue = timeSaved.session;
 		time.style = "color:#FFFFFF";
