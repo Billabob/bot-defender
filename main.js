@@ -1,8 +1,9 @@
 let firefox = typeof browser != 'undefined'
 let declined = { session: 0, running: 0 }
 let GlitchedTrades = {}, Strikes = {}
-let raw_botList = {}, botList = {}
+let raw_botList = {}, botList = {}, whitelist = {}
 let csrfToken
+let patron = false;
 
 // Made by billabot
 // Join the discord server for bug reports and/or questions: discord.gg/qJpQdkW
@@ -12,7 +13,6 @@ chrome.runtime.onMessage.addListener( async function(request, sender, sendRespon
 	// Request to get session declined from popup.js	
 	if(request.getSessionDeclined){
 		if(firefox){ return Promise.resolve(declined.session); }
-
 		sendResponse(declined.session)
 	}
 
@@ -33,6 +33,35 @@ async function localSet(key, data){
 	return await new Promise(resolve => {
 		chrome.storage.local.set({[key]: data}, function(result){ resolve(result) })
 	})
+}
+
+// This function checks if user is a patron
+async function isPatron(){
+	let isPatron = false;
+	let res = await fetch(`https://www.patreon.com/api/pledges`)
+	.then(res => res.json())
+	.then(res => res.data)
+
+	for(let k in res){
+		if(res[k].relationships.creator.data.id == `17441190` && res[k].attributes.amount_cents > `99`){
+			isPatron = true
+			break;
+		}
+	}
+
+	localSet('isPatron', isPatron)
+	patron = isPatron; // Set global variable
+
+	if(!isPatron){ return }
+	
+	let whitelistObject = await localGet('whitelist').then(res => res.whitelist || [])
+	whitelist = {}
+
+	for(let k in whitelistObject){
+		if(!whitelistObject[k]){ continue }
+		if(!whitelistObject[k].userId){ continue }
+		whitelist[whitelistObject[k].userId] = true;
+	}
 }
 
 async function checkFirstTime(){
@@ -66,6 +95,7 @@ async function checkCache(){
 	await localSet('TradesDeclinedTotal', Math.max(1,declined.session)) // Sets # trades declined to 1 in case there's no saved stat
 }
 
+// This function gets the bot list from the gist and saves it to local storage
 async function getBotList() {
 	let result = await fetch('https://gist.githubusercontent.com/codetariat/03043d47689a6ee645366d327b11944c/raw/').then(res=>res.json())
 	raw_botList = result
@@ -92,7 +122,9 @@ async function compileInbounds() {
 async function filterBots(inbounds){
 	declined.running = 0;
 	for(let k in inbounds){
-		if(botList[inbounds[k].user.id] && !GlitchedTrades[inbounds[k].id]){ // If the sender is on the bot list... then decline
+		if(GlitchedTrades[inbounds[k].id]){ continue }
+		if(whitelist[inbounds[k].user.id] && patron){ continue }
+		if(botList[inbounds[k].user.id]){ // If the sender is on the bot list... then decline
 			await declineTrade(inbounds[k].id)
 		}
 	}
@@ -137,21 +169,24 @@ let running = false;
 async function main(){
 	if(running){ return }
 	try {
-		await checkFirstTime();
-		let initialised = await initialise()
-		if(!initialised){return} // extension turned off
+		await isPatron(); // Check if user is a patron
+		await checkFirstTime(); // Check if user is running the extension for the first time
+		let initialised = await initialise() // Initialise extension
+		if(!initialised){return} // Extension is turned off
 		running = true;
 		await checkCache()
 		await getBotList()
 		let trades = await compileInbounds()
 		await filterBots(trades)
-	} catch {
-		// catch exception error etc
+	} catch (err) {
+		// Catch exception error
+		console.trace(`CAUGHT ERROR: ${err}`)
 	} finally {
 		running = false;
 	}
 }
 
 getBotList(); // Get bot list once
+isPatron(); // Check if user is a patron
 main();
 setInterval(main, 1 * 1000 * 60); // Run main() every 60 seconds

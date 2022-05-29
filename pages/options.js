@@ -61,6 +61,9 @@ async function main(){
 	// Modify stat paragraph to include the # of bots listed on our gist
 	document.getElementById("stat").firstChild.nodeValue = `There are ${bots.length} known bot accounts and while we try our best to carefully investigate every user reported, mistakes do happen. Appeals can be made in our Discord server.`
 	
+	// Modify list header to include the # of bots listed on our gist as well
+	document.getElementById("list-header-text").firstChild.firstChild.firstChild.nodeValue += ` (${bots.length})`
+
 	// Handle clicks for element button `showbots`
 	document.getElementById("showbots").onclick = function(){
 		document.getElementById("showbots").remove()
