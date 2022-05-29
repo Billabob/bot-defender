@@ -4,6 +4,7 @@ let buttonImages = {
 	off: chrome.runtime.getURL('content/off.png'),
 	on: chrome.runtime.getURL('content/on.png'),
 }
+let patron;
 
 async function localGet(key){
 	return await new Promise(resolve => { 
@@ -117,7 +118,6 @@ function mouseHandlers(){
 	document.getElementById("column2").onmouseout = function(){time.style = "color:#202020"}
 	
 	document.getElementById("whitelist-button").onclick = async function(){
-		let patron = await localGet('isPatron').then(res => { res.isPatron })
 		// If user is patron then show config.html file
 		if(patron){ chrome.tabs.create({'url': "/pages/config.html" }); return }
 		// If not show patreon.html file
@@ -134,6 +134,7 @@ function mouseHandlers(){
 	}
 }
 
+
 window.onload = async function(){
 	// Sets on/off state
 	await setState();
@@ -143,6 +144,7 @@ window.onload = async function(){
 	displayTimeSaved(declined);
 
 	// Get patron
+	patron = await localGet('isPatron').then(res => { res.isPatron })
 
 	// Handle mouseEvents
 	mouseHandlers();
