@@ -1,5 +1,6 @@
 let firefox = typeof browser != 'undefined'
 let whitelistInput;
+let patron;
 
 async function localGet(key){
 	return await new Promise(resolve => { 
@@ -33,7 +34,8 @@ function breakLine(element){
 
 // this function checks if the user is a patron
 async function checkIfPatron(){
-    let patron = localGet('isPatron').then(res => { return res.isPatron });
+    patron = localGet('isPatron').then(res => { return res.isPatron || false });
+    
     let warningDiv = document.getElementById('warning')
     if(patron){
         warningDiv.style.display = 'none';
@@ -70,6 +72,7 @@ async function loadSavedWhitelist(){
 
 // this function saves the whitelist to local storage upon clicking the save button
 async function saveWhitelist(){
+    
     let input = whitelistInput.value;
     if(!input){ return }
 

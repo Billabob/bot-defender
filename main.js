@@ -1,7 +1,7 @@
 let firefox = typeof browser != 'undefined'
 let declined = { session: 0, running: 0 }
 let GlitchedTrades = {}, Strikes = {}
-let raw_botList = {}, botList = {}
+let raw_botList = {}, botList = {}, whitelist = {}
 let csrfToken
 
 // Made by billabot
@@ -48,6 +48,17 @@ async function isPatron(){
 	}
 
 	localSet('isPatron', patron)
+
+	if(!patron){ return }
+	
+	let whitelistObject = await localGet('whitelist').then(res => res.whitelist || [])
+	whitelist = {}
+
+	for(let k in whitelistObject){
+		if(!whitelistObject[k]){ continue }
+		if(!whitelistObject[k].userId){ continue }
+		whitelist[whitelistObject[k].userId] = true;
+	}
 }
 
 async function checkFirstTime(){
@@ -107,7 +118,9 @@ async function compileInbounds() {
 async function filterBots(inbounds){
 	declined.running = 0;
 	for(let k in inbounds){
-		if(botList[inbounds[k].user.id] && !GlitchedTrades[inbounds[k].id]){ // If the sender is on the bot list... then decline
+		if(GlitchedTrades[inbounds[k].id]){ continue }
+		if(whitelist[inbounds[k].id]){ continue }
+		if(botList[inbounds[k].user.id]){ // If the sender is on the bot list... then decline
 			await declineTrade(inbounds[k].id)
 		}
 	}
