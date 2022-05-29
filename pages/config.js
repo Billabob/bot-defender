@@ -75,12 +75,17 @@ async function saveWhitelist(){
     let input = whitelistInput.value;
     let splitInput = input.split(`\n`)
     let userArray = []
-    if(splitInput[0].split(',').length < 2){ userArray = []; return }
+
+    if(splitInput[0].split(',').length < 2){ userArray = [];
+        await localSet('whitelist', userArray)
+        return;
+    }
+
     for(let k in splitInput){
         userArray[k] = {username: splitInput[k].split(',')[0].trim(), userId: splitInput[k].split(',')[1].trim()}
     }
 
-    localSet('whitelist', userArray)
+    await localSet('whitelist', userArray)
 }
 
 // this function loads the clickhandler for the save button
