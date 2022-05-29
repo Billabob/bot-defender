@@ -34,7 +34,7 @@ function breakLine(element){
 
 // this function checks if the user is a patron
 async function checkIfPatron(){
-    patron = localGet('isPatron').then(res => { return res.isPatron || false });
+    patron = await localGet('isPatron').then(res => { return res.isPatron || false });
     
     let warningDiv = document.getElementById('warning')
     if(patron){
