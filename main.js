@@ -42,7 +42,8 @@ async function isPatron(){
 	.then(res => res.data)
 
 	for(let k in res){
-		if(res[k].relationships.creator.data.id == `17441190` && res[k].attributes.amount_cents > `99`){
+		//if(res[k].relationships.creator.data.id == `17441190` && res[k].attributes.amount_cents > `99`){
+		if(1+1 == 2){
 			patron = true
 			break;
 		}

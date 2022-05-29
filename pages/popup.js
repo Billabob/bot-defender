@@ -144,7 +144,7 @@ window.onload = async function(){
 	displayTimeSaved(declined);
 
 	// Get patron
-	patron = await localGet('isPatron').then(res => { res.isPatron })
+	patron = await localGet('isPatron').then(res => res.isPatron )
 
 	// Handle mouseEvents
 	mouseHandlers();
