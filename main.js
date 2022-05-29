@@ -3,7 +3,6 @@ let declined = { session: 0, running: 0 }
 let GlitchedTrades = {}, Strikes = {}
 let raw_botList = {}, botList = {}
 let csrfToken
-let patron = false;
 
 // Made by billabot
 // Join the discord server for bug reports and/or questions: discord.gg/qJpQdkW
@@ -21,18 +20,6 @@ chrome.runtime.onMessage.addListener( async function(request, sender, sendRespon
 		if(firefox){ return Promise.resolve(raw_botList); }
 		sendResponse(raw_botList)
 	}
-
-	// Request to show whitelisted bots from config.js
-	if(request.showWhitelisted){
-		if(firefox){ return Promise.resolve(botList); }
-		sendResponse(botList)
-	}
-
-	// Request patron variable
-	if(request.getPatron){
-		if(firefox){ return Promise.resolve(patron); }
-		sendResponse(patron)
-	}
 })
 
 async function localGet(key){
@@ -48,16 +35,19 @@ async function localSet(key, data){
 }
 
 async function isPatron(){
-	let res = await fetch(`https://www.patreon.com/TradeBotDefender`)
-	.then(res => res.text())
-	.then(res => res.includes(`Become a patron`))
-	.catch(err => { console.trace(`CAUGHT ERROR: ${err}`) })
+	let patron = false;
+	let res = await fetch(`https://www.patreon.com/api/pledges`)
+	.then(res => res.json())
+	.then(res => res.data)
 
-	patron = !res;
+	for(let k in res){
+		if(res[k].relationships.creator.data.id == `17441190` && res[k].attributes.amount_cents > `99`){
+			patron = true
+			break;
+		}
+	}
 
-	if(!patron){ localSet('isPatron', false) }
-
-	localSet('isPatron', true)
+	localSet('isPatron', patron)
 }
 
 async function checkFirstTime(){

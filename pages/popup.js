@@ -116,7 +116,7 @@ function mouseHandlers(){
 	document.getElementById("column1").onmouseout = function(){time.style = "color:#202020"}
 	document.getElementById("column2").onmouseout = function(){time.style = "color:#202020"}
 	
-	document.getElementById("whitelist-button").onclick = function(){
+	document.getElementById("whitelist-button").onclick = async function(){
 		let patron = await localGet('isPatron').then(res => { res.isPatron })
 		// If user is patron then show config.html file
 		if(patron){ chrome.tabs.create({'url': "/pages/config.html" }); return }
@@ -141,6 +141,8 @@ window.onload = async function(){
 	// Gets and displayes session + total declined trades
 	let declined = await getDeclined();
 	displayTimeSaved(declined);
+
+	// Get patron
 
 	// Handle mouseEvents
 	mouseHandlers();

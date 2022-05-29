@@ -13,6 +13,25 @@ async function localSet(key, data){
 	})
 }
 
+function addText(element, text, options){
+	// Get element name to create
+	let elementName = options && options.customElement || `span`
+
+	// Create new HTML element newElement
+	let newElement = document.createElement(elementName);
+
+	// Modify text and append newElement to given element
+	newElement.textContent = text;
+	element.appendChild(newElement);
+}
+
+function breakLine(element){
+	// Create br element and append to given element
+	let br = document.createElement(`br`);
+	element.appendChild(br);
+}
+
+// this function checks if the user is a patron
 async function checkIfPatron(){
     let patron = localGet('isPatron').then(res => { return res.isPatron });
     let warningDiv = document.getElementById('warning')
@@ -25,20 +44,46 @@ async function checkIfPatron(){
     }
 }
 
+// this function loads the saved whitelist and displays it in the whitelist input field + saved whitelist div
 async function loadSavedWhitelist(){
     let whitelist = await localGet('whitelist').then(res => { return res.whitelist });
-    // format whitelist and load it onto whitelistInput
-}
+    if(!whitelist){ return }
+    let savedWhitelistDiv = document.getElementById('saved-whitelist')
 
-async function saveWhitelist(){
-    // get whitelist from whitelistInput, format it and save it to localSet('whitelist', whitelist)
-    let whitelist = whitelistInput.value;
-    if(whitelist){
-        // await localSet('whitelist', whitelist);
-        await saveWhitelist();
+    // declare usersString variable
+    let usersString = ''
+    // loop through whitelist
+    for(let k in whitelist){
+        let user = whitelist[k];
+        // add username and userId to usersString
+        usersString += `${user.username}, ${user.userId}`
+        usersString += '\n'
+
+        // add username and userId to savedWhitelistDiv
+        addText(savedWhitelistDiv, `${user.username}, ${user.userId}`)
+        breakLine(savedWhitelistDiv)
     }
+
+    // set whitelistInput value to usersString
+    whitelistInput.value = usersString
 }
 
+// this function saves the whitelist to local storage upon clicking the save button
+async function saveWhitelist(){
+    let input = whitelistInput.value;
+    if(!input){ return }
+
+    let splitInput = input.split(`\n`)
+    let userArray = []
+    if(splitInput[0].split(',').length < 2){ userArray = []; return }
+    for(let k in splitInput){
+        userArray[k] = {username: splitInput[k].split(',')[0].trim(), userId: splitInput[k].split(',')[1].trim()}
+    }
+
+    localSet('whitelist', userArray)
+}
+
+// this function loads the clickhandler for the save button
 async function loadClickhandlerSaveButton(){
     document.getElementById('save-whitelist').onclick = saveWhitelist;
 }
@@ -53,7 +98,7 @@ async function main(){
 
 window.onload = function(){
     // Initialise config.js page variables
-    whitelistInput = document.getElementById('whitelist-input').value;
+    whitelistInput = document.getElementById('whitelist-input');
 
 	main()
 }

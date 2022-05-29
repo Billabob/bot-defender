@@ -29,6 +29,7 @@
     "permissions": [
         "https://trades.roblox.com/v1/trades/*",
         "https://gist.githubusercontent.com/*",
+        "https://www.patreon.com/TradeBotDefender",
         "storage"
     ],
 
