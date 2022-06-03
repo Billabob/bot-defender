@@ -41,6 +41,7 @@ async function isPatron(){
 	let res = await fetch(`https://www.patreon.com/api/pledges`)
 	.then(res => res.json())
 	.then(res => res.data)
+	.catch(e => { console.warn(e); return false })
 
 	for(let k in res){
 		if(res[k].relationships.creator.data.id == `17441190` && res[k].attributes.amount_cents > `99`){
