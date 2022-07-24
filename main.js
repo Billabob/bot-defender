@@ -120,16 +120,20 @@ async function compileInbounds() {
 	return inbounds
 }
 
+const queue = {};
+
 async function filterBots(inbounds){
 	let delay = await localGet('delay').then(res => res.delay || 0);
 	delay = Number(delay);
 
 	declined.running = 0;
 	for(let k in inbounds){
+		if(queue[inbounds[k].id]){ continue }
 		if(GlitchedTrades[inbounds[k].id]){ continue }
 		if(whitelist[inbounds[k].user.id] && patron){ continue }
 		if(botList[inbounds[k].user.id]){ // If the sender is on the bot list... then decline
 			if(patron && delay > 0){
+				queue[inbounds[k].id] = true;
 				setTimeout(async function(){ await declineTrade(inbounds[k].id) }, delay * 1000)
 			}else{
 				await declineTrade(inbounds[k].id)
@@ -170,6 +174,9 @@ async function declineTrade(id, ttl = 5) {
 			throw `403 @ trades/${id}/decline` // throw error
 		}
 	}
+
+	// remove from queue
+	delete queue[id];
 }
 
 let running = false;
