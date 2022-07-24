@@ -70,6 +70,12 @@ async function loadSavedWhitelist(){
     whitelistInput.value = usersString
 }
 
+// this function saves the delay to local storage upon clicking the save button
+async function saveDelay(){
+    let delay = document.getElementById('delay-input').value;
+    await localSet('delay', delay)
+}
+
 // this function saves the whitelist to local storage upon clicking the save button
 async function saveWhitelist(){
     let input = whitelistInput.value;
@@ -88,9 +94,22 @@ async function saveWhitelist(){
     await localSet('whitelist', userArray)
 }
 
+// this function saves all
+async function saveAll(){
+    await saveDelay();
+    await saveWhitelist();
+}
+
 // this function loads the clickhandler for the save button
 async function loadClickhandlerSaveButton(){
-    document.getElementById('save-whitelist').onclick = saveWhitelist;
+    document.getElementById('save-button').onclick = saveAll;
+}
+
+// this function loads in the delay for the delay input field
+async function loadSavedDelay(){
+    let delay = await localGet('delay').then(res => { return res.delay });
+    if(!delay){ return }
+    document.getElementById('delay-input').value = delay;
 }
 
 async function main(){
@@ -98,6 +117,7 @@ async function main(){
     if(!patron){ return }
 
     await loadSavedWhitelist();
+    await loadSavedDelay();
     await loadClickhandlerSaveButton();
 }
 

@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "Roblox Trade Bot Defender",
     "description": "Automatically declines trades from bots",
-    "version": "0.0.0.25",
+    "version": "0.0.0.26",
 
     "background": {
         "scripts": [

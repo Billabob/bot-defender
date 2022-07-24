@@ -121,12 +121,19 @@ async function compileInbounds() {
 }
 
 async function filterBots(inbounds){
+	let delay = await localGet('delay').then(res => res.delay || 0);
+	delay = Number(delay);
+
 	declined.running = 0;
 	for(let k in inbounds){
 		if(GlitchedTrades[inbounds[k].id]){ continue }
 		if(whitelist[inbounds[k].user.id] && patron){ continue }
 		if(botList[inbounds[k].user.id]){ // If the sender is on the bot list... then decline
-			await declineTrade(inbounds[k].id)
+			if(patron && delay > 0){
+				setTimeout(async function(){ await declineTrade(inbounds[k].id) }, delay * 1000)
+			}else{
+				await declineTrade(inbounds[k].id)
+			}
 		}
 	}
 
