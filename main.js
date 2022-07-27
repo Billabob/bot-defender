@@ -1,7 +1,12 @@
 let firefox = typeof browser != 'undefined'
+let glitchedTrades = {};
+const strikes = {};
+
 let declined = { session: 0, running: 0 }
-let GlitchedTrades = {}, Strikes = {}
-let raw_botList = {}, botList = {}, whitelist = {}
+let unprocessedBotList = {}
+let botList = {}
+let whitelist = {}
+
 let csrfToken
 let patron = false;
 
@@ -18,8 +23,8 @@ chrome.runtime.onMessage.addListener( async function(request, sender, sendRespon
 
 	// Request to show bots from options.js
 	if(request.showBots){
-		if(firefox){ return Promise.resolve(raw_botList); }
-		sendResponse(raw_botList)
+		if(firefox){ return Promise.resolve(unprocessedBotList); }
+		sendResponse(unprocessedBotList)
 	}
 })
 
@@ -86,7 +91,7 @@ async function initialise() {
 		await localSet('isiton', true)
 	}
 
-	GlitchedTrades = await localGet('GlitchedTrades').then(res => res.GlitchedTrades || {})
+	glitchedTrades = await localGet('glitchedTrades').then(res => res.glitchedTrades || {})
 	return enabled
 }
 
@@ -99,7 +104,7 @@ async function checkCache(){
 // This function gets the bot list from the gist and saves it to local storage
 async function getBotList() {
 	let result = await fetch('https://gist.githubusercontent.com/codetariat/03043d47689a6ee645366d327b11944c/raw/').then(res=>res.json())
-	raw_botList = result
+	unprocessedBotList = result
 	botList = {}
 	for(let k in result){
 		botList[result[k][0]] = result[k][1]
@@ -129,7 +134,7 @@ async function filterBots(inbounds){
 	declined.running = 0;
 	for(let k in inbounds){
 		if(queue[inbounds[k].id]){ continue }
-		if(GlitchedTrades[inbounds[k].id]){ continue }
+		if(glitchedTrades[inbounds[k].id]){ continue }
 		if(whitelist[inbounds[k].user.id] && patron){ continue }
 		if(botList[inbounds[k].user.id]){ // If the sender is on the bot list... then decline
 			if(patron && delay > 0){
@@ -154,19 +159,28 @@ async function declineTrade(id, ttl = 5) {
 		method: 'POST',
 		headers: new Headers({'X-CSRF-TOKEN':  csrfToken}),
 	})
+
+	// remove from queue
+	delete queue[id];
 	
 	if(resp.status == 200){
 		declined.session++; declined.running++ // Adds one to # of trades declined this session and total
-		return true // Return success
-	}else if(resp.status == 400){
-		Strikes[id] = Strikes[id] + 1 || 1
-		if(Strikes[id]==3){ // Third strike, stop attempting to decline
-			GlitchedTrades[id]=true
-			await localSet(GlitchedTrades, GlitchedTrades)
-		}
-	}else if(resp.status == 403){
+		return true;
+	}
+	
+	if(resp.status == 400){
+		strikes[id] = strikes[id] + 1 || 1
+		if(strikes[id] < 3){ return; }
+		
+		// Third strike, stop attempting to decline
+		glitchedTrades[id]=true
+		await localSet(glitchedTrades, glitchedTrades)
+		return false;
+	}
+	
+	if(resp.status == 403){
 		let _json = await resp.json();
-		if(_json.errors && _json.errors[0].code == 0 && ttl >= 0){
+		if(_json?.errors?.[0]?.code == 9001 && ttl >= 0){
 			// CSRF token (which is needed to execute an action) is outdated and we need to get a new one and retry
 			csrfToken = resp.headers.get('x-csrf-token')
 			await declineTrade(id, ttl-1);
@@ -174,9 +188,6 @@ async function declineTrade(id, ttl = 5) {
 			throw `403 @ trades/${id}/decline` // throw error
 		}
 	}
-
-	// remove from queue
-	delete queue[id];
 }
 
 let running = false;
