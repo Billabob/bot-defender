@@ -1,53 +1,67 @@
 <!DOCTYPE html>
 
 <head>
-	<title>Bot Defender Configuration</title>
+	<title>Bot Defender Settings</title>
 	<script src="config.js"></script>
 </head>
 
 <body style="background-color:#272727; font-family:'Segoe UI'">
-    <h2 style="text-align: center;"><strong>Configuration</strong></h2>
+    <h2 style="text-align: center;"><strong>Settings</strong></h2>
+    <div id="warning" style="text-align: center; display: block;">Warning: you are not a patron so this feature will not work for you.</div>
+    <h3 style="text-align: center;"><strong>Delay</strong></h3>
+    <div style="text-align: center;">
+        Trades will be declined after a delay of: <input id="delay-input" type="number" value="0" style="width: 50px;">
+        <span>seconds</span>
+    </div>
+    <h5 style="text-align: center">Please note that it takes anywhere from 0 to 60 seconds for the extension to detect a trade as it only scans your inbounds once a minute.</h5>
+    
+    <h3 style="text-align: center;"><strong>Whitelist</strong></h3>
     <div id="information">
-            <div style="text-align: center;">Input username then a comma for the userId, seperated by newlines (enter):</div>
-            <div style="text-align: center;">username, userId</div>
-            <div style="text-align: center;">username, userId</div>
-            <br>
-            <div style="text-align: center;">Example:</div>
-            <div style="text-align: center;">billabot, 100328383</div>
-            <div style="text-align: center;">Awesomerly, 16651514</div>
-            <br>
-            <div style="text-align: center;">To save click "Save" underneath the form and refresh to see if it's saved</div>
-            <br>
-            <div id="warning" style="text-align: center; display: block;">Warning: you are not a patron so this feature will not work for you.</div>
-        </div>
-    <div class="box-left" id="main-box">
-        <h3 style="text-align: center; margin-top: 0px;"><strong>Edit your whitelist</strong></h3>
-        <textarea id="whitelist-input" class="textarea"></textarea>
-        <button id="save-whitelist" class="button">Save</button>
+        <div style="text-align: center;">Input username then a comma for the userId, seperated by newlines (enter):</div>
+        <div style="text-align: center;">username, userId</div>
+        <div style="text-align: center;">username, userId</div>
+        <br>
+        <div style="text-align: center;">Example:</div>
+        <div style="text-align: center;">billabot, 100328383</div>
+        <div style="text-align: center;">Awesomerly, 16651514</div>
+        <br>
+        <div style="text-align: center;">To save click "Save" underneath the form and refresh to see if it's saved</div>
+        <br>
     </div>
-    <div class="box-right">
-        <h3 style="text-align: center; margin-top: 0px;"><strong>Your saved whitelist</strong></h3>
-        <div style="text-align: center;" id="saved-whitelist">
+    <div style="display:block; width:100%">
+        <div class="box-left" id="main-box">
+            <h3 style="text-align: center; margin-top: 0px;"><strong>Edit your whitelist</strong></h3>
+            <textarea id="whitelist-input" class="textarea"></textarea>
+        </div>
+        <div class="box-right">
+            <h3 style="text-align: center; margin-top: 0px;"><strong>Your saved whitelist</strong></h3>
+            <div style="text-align: center;" id="saved-whitelist">
+            </div>
         </div>
     </div>
+    
+    <button id="save-button" class="button">Save all settings</button>
 </body>
 
 <style>
+
     #warning {
         /* make text red */
         color: rgb(219, 54, 54);
     }
 
-    #save-whitelist {
+    #save-button {
         /* make button centered in div */
         margin-left: auto;
         margin-right: auto;
         display: block;
-        margin-top: 25px;
+        margin-top: 500px;
         margin-bottom: 20px;
+        position: relative;
+        width: 100%;
 
         /* make button bigger */
-        width: 100px;
+        width: 200px;
         height: 30px;
         font-size: 15px;
 
@@ -65,12 +79,12 @@
         cursor: pointer;
     }
 
-    #save-whitelist:hover {
+    #save-button:hover {
         /* make button hover effect */
         background-color: rgb(200, 200, 200);
     }
 
-    #save-whitelist:active {
+    #save-button:active {
         /* make button click effect */
         background-color: rgb(175, 175, 175);
 

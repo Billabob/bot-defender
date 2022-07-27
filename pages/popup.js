@@ -109,6 +109,8 @@ function displayTimeSaved(declined){
 }
 
 function mouseHandlers(){
+	let time = document.getElementById("time")
+	
 	// What the hell?
 	document.getElementById("onbutton").onclick = function(){_switch()}
 	document.getElementById("help").onclick = function(){ chrome.tabs.create({'url': "/pages/options.html" }) }
@@ -117,7 +119,7 @@ function mouseHandlers(){
 	document.getElementById("column1").onmouseout = function(){time.style = "color:#202020"}
 	document.getElementById("column2").onmouseout = function(){time.style = "color:#202020"}
 	
-	document.getElementById("whitelist-button").onclick = async function(){
+	document.getElementById("settings-button").onclick = async function(){
 		// If user is patron then show config.html file
 		if(patron){ chrome.tabs.create({'url': "/pages/config.html" }); return }
 		// If not show patreon.html file
