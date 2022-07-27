@@ -180,7 +180,8 @@ async function declineTrade(id, ttl = 5) {
 	
 	if(resp.status == 403){
 		let _json = await resp.json();
-		if(_json?.errors?.[0]?.code == 9001 && ttl >= 0){
+		let error = _json?.errors?.[0]?.code
+		if( (error == 0 || error == 9001) && ttl >= 0){
 			// CSRF token (which is needed to execute an action) is outdated and we need to get a new one and retry
 			csrfToken = resp.headers.get('x-csrf-token')
 			await declineTrade(id, ttl-1);
