@@ -1,44 +1,49 @@
 {
-    "manifest_version": 2,
-    "name": "Roblox Trade Bot Defender",
-    "description": "Automatically declines trades from bots",
-    "version": "0.0.0.26",
-
-    "background": {
-        "scripts": [
-            "main.js"
-        ],
-        "persistent": true
-    },
-
-    "content_scripts": [
-        {
-          "run_at": "document_start",
-          "matches": ["https://www.roblox.com/*"],
-          "js": ["content/botIcon.js"]
-        }
-    ],
-
-    "icons": {
-        "16": "content/icon16.png",
-        "48": "content/icon48.png",
-        "128": "content/icon128.png",
-        "512": "content/icon512.png"
-    },
-
-    "permissions": [
-        "https://trades.roblox.com/v1/trades/*",
-        "https://gist.githubusercontent.com/*",
-        "https://www.patreon.com/TradeBotDefender",
-        "storage"
-    ],
-
-    "browser_action": {
-        "default_icon": "content/icon512.png",
-        "default_popup": "pages/popup.html"
-    },
-
-    "web_accessible_resources": [
+  "manifest_version": 3,
+  "name": "Roblox Trade Bot Defender",
+  "description": "Automatically declines trades from bots",
+  "version": "0.0.0.26",
+  "background": {
+    "service_worker": "main.js"
+  },
+  "content_scripts": [
+    {
+      "run_at": "document_start",
+      "matches": [
+        "https://www.roblox.com/*"
+      ],
+      "js": [
+        "content/botIcon.js"
+      ]
+    }
+  ],
+  "icons": {
+    "16": "content/icon16.png",
+    "48": "content/icon48.png",
+    "128": "content/icon128.png",
+    "512": "content/icon512.png"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
         "*.png"
-    ]
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
+  "action": {
+    "default_icon": "content/icon512.png",
+    "default_popup": "pages/popup.html"
+  },
+  "content_security_policy": { "extension_pages": "script-src 'self'; object-src 'self'" },
+  "host_permissions": [
+    "https://trades.roblox.com/v1/trades/*",
+    "https://gist.githubusercontent.com/*",
+    "https://www.patreon.com/TradeBotDefender"
+  ]
 }
