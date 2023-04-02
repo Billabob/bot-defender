@@ -16,10 +16,6 @@ The extension is free and available for all on desktop browsers.
 
 https://chrome.google.com/webstore/detail/roblox-trade-bot-defender/ndamkiaclbnglafnkemaomabalakdmmm
 
-### Firefox
-
-https://addons.mozilla.org/en-GB/firefox/addon/rblx-trade-bot-defender
-
 ## Discord Server
 
 Server for general discussion, suggestions, reporting and contributing to the bot list:
