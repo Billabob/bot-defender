@@ -22,18 +22,6 @@ https://addons.mozilla.org/en-GB/firefox/addon/rblx-trade-bot-defender
 
 ## Discord Server
 
-Server for general discussion, suggestions, reporting :
-
-https://discord.gg/qJpQdkW
-
-## Consider becoming a patron
-
-Please consider supporting us on Patreon:
-
-https://www.patreon.com/TradeBotDefender
-
-## Contribute to the bot list
-
-Join the official discord server and follow the guide in order to report suspected bots:
+Server for general discussion, suggestions, reporting and contributing to the bot list:
 
 https://discord.gg/qJpQdkW
