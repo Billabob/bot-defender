@@ -8,7 +8,6 @@ let botList = {}
 let whitelist = {}
 
 let csrfToken
-let patron = false;
 
 // Made by billabot
 // Join the discord server for bug reports and/or questions: discord.gg/qJpQdkW
@@ -38,36 +37,6 @@ async function localSet(key, data){
 	return await new Promise(resolve => {
 		chrome.storage.local.set({[key]: data}, function(result){ resolve(result) })
 	})
-}
-
-// This function checks if user is a patron
-async function isPatron(){
-	let isPatron = false;
-	let res = await fetch(`https://www.patreon.com/api/pledges`)
-	.then(res => res.json())
-	.then(res => res.data)
-	.catch(e => { console.warn(e); return false })
-
-	for(let k in res){
-		if(res[k].relationships.creator.data.id == `17441190` && res[k].attributes.amount_cents > `99`){
-			isPatron = true
-			break;
-		}
-	}
-
-	localSet('isPatron', isPatron)
-	patron = isPatron; // Set global variable
-
-	if(!isPatron){ return }
-	
-	let whitelistObject = await localGet('whitelist').then(res => res.whitelist || [])
-	whitelist = {}
-
-	for(let k in whitelistObject){
-		if(!whitelistObject[k]){ continue }
-		if(!whitelistObject[k].userId){ continue }
-		whitelist[whitelistObject[k].userId] = true;
-	}
 }
 
 async function checkFirstTime(){
@@ -135,9 +104,10 @@ async function filterBots(inbounds){
 	for(let k in inbounds){
 		if(queue[inbounds[k].id]){ continue }
 		if(glitchedTrades[inbounds[k].id]){ continue }
-		if(whitelist[inbounds[k].user.id] && patron){ continue }
+		if(whitelist[inbounds[k].user.id]){ continue }
+
 		if(botList[inbounds[k].user.id]){ // If the sender is on the bot list... then decline
-			if(patron && delay > 0){
+			if(delay > 0){
 				queue[inbounds[k].id] = true;
 				setTimeout(async function(){ await declineTrade(inbounds[k].id) }, delay * 1000)
 			}else{
@@ -196,7 +166,6 @@ let running = false;
 async function main(){
 	if(running){ return }
 	try {
-		await isPatron(); // Check if user is a patron
 		await checkFirstTime(); // Check if user is running the extension for the first time
 		let initialised = await initialise() // Initialise extension
 		if(!initialised){return} // Extension is turned off
@@ -214,6 +183,5 @@ async function main(){
 }
 
 getBotList(); // Get bot list once
-isPatron(); // Check if user is a patron
 main();
 setInterval(main, 1 * 1000 * 60); // Run main() every 60 seconds
