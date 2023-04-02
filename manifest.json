@@ -43,7 +43,6 @@
   "content_security_policy": { "extension_pages": "script-src 'self'; object-src 'self'" },
   "host_permissions": [
     "https://trades.roblox.com/v1/trades/*",
-    "https://gist.githubusercontent.com/*",
-    "https://www.patreon.com/TradeBotDefender"
+    "https://gist.githubusercontent.com/*"
   ]
 }

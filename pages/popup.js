@@ -4,7 +4,6 @@ let buttonImages = {
 	off: chrome.runtime.getURL('content/off.png'),
 	on: chrome.runtime.getURL('content/on.png'),
 }
-let patron;
 
 async function localGet(key){
 	return await new Promise(resolve => { 
@@ -115,15 +114,13 @@ function mouseHandlers(){
 	document.getElementById("onbutton").onclick = function(){_switch()}
 	document.getElementById("help").onclick = function(){ chrome.tabs.create({'url': "/pages/options.html" }) }
 	document.getElementById("discord").onclick = function(){ chrome.tabs.create({'url': "https://discord.gg/qJpQdkW" }) }
-	document.getElementById("patreon").onclick = function(){ chrome.tabs.create({'url': "https://www.patreon.com/TradeBotDefender" }) }
 	document.getElementById("column1").onmouseout = function(){time.style = "color:#202020"}
 	document.getElementById("column2").onmouseout = function(){time.style = "color:#202020"}
 	
 	document.getElementById("settings-button").onclick = async function(){
-		// If user is patron then show config.html file
-		if(patron){ chrome.tabs.create({'url': "/pages/config.html" }); return }
-		// If not show patreon.html file
-		chrome.tabs.create({'url': "/pages/patreon.html" })
+		// Show config.html file
+		chrome.tabs.create({'url': "/pages/config.html" });
+		return;
 	}
 
 	document.getElementById("column1").onmousemove = function(){
@@ -144,9 +141,6 @@ window.onload = async function(){
 	// Gets and displayes session + total declined trades
 	let declined = await getDeclined();
 	displayTimeSaved(declined);
-
-	// Get patron
-	patron = await localGet('isPatron').then(res => res.isPatron )
 
 	// Handle mouseEvents
 	mouseHandlers();
